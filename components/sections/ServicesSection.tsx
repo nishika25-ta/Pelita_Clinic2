@@ -1,4 +1,5 @@
-import { motion } from "framer-motion";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { motion, useMotionValue, type PanInfo } from "framer-motion";
 import {
   Activity,
   Baby,
@@ -16,38 +17,23 @@ import { useI18n } from "../../contexts/I18nContext";
 import type { ServiceItem } from "../../types/clinic";
 import { SERVICES } from "../../config/clinicData";
 import { SpotlightCard } from "../ui/SpotlightCard";
-import { useNarrowViewportForStack } from "../../utils/useNarrowViewport";
 import { useParallax } from "../../utils/useParallax";
-import ScrollStack, { ScrollStackItem } from "../ui/ScrollStack";
 
 const iconClass = "h-6 w-6 text-indigo-500";
 
 function ServiceCategoryIcon({ service }: { service: ServiceItem }) {
-  if (service.category === "Women's Health") {
-    return <UserRound className={iconClass} aria-hidden />;
-  }
-  if (service.category === "Sexual Health") {
-    return <ShieldPlus className={iconClass} aria-hidden />;
-  }
+  if (service.category === "Women's Health") return <UserRound className={iconClass} aria-hidden />;
+  if (service.category === "Sexual Health") return <ShieldPlus className={iconClass} aria-hidden />;
   switch (service.iconName) {
-    case "stethoscope":
-      return <Stethoscope className={iconClass} aria-hidden />;
-    case "activity":
-      return <Activity className={iconClass} aria-hidden />;
-    case "bug":
-      return <Microscope className={iconClass} aria-hidden />;
-    case "syringe":
-      return <Syringe className={iconClass} aria-hidden />;
-    case "baby":
-      return <Baby className={iconClass} aria-hidden />;
-    case "heartPulse":
-      return <HeartPulse className={iconClass} aria-hidden />;
-    case "shieldAlert":
-      return <Droplets className={iconClass} aria-hidden />;
-    case "scissors":
-      return <Scissors className={iconClass} aria-hidden />;
-    default:
-      return <Stethoscope className={iconClass} aria-hidden />;
+    case "stethoscope": return <Stethoscope className={iconClass} aria-hidden />;
+    case "activity": return <Activity className={iconClass} aria-hidden />;
+    case "bug": return <Microscope className={iconClass} aria-hidden />;
+    case "syringe": return <Syringe className={iconClass} aria-hidden />;
+    case "baby": return <Baby className={iconClass} aria-hidden />;
+    case "heartPulse": return <HeartPulse className={iconClass} aria-hidden />;
+    case "shieldAlert": return <Droplets className={iconClass} aria-hidden />;
+    case "scissors": return <Scissors className={iconClass} aria-hidden />;
+    default: return <Stethoscope className={iconClass} aria-hidden />;
   }
 }
 
@@ -56,17 +42,17 @@ function ServiceCategoryInner({ service }: { service: ServiceItem }) {
   const { title, items } = localizeService(service);
 
   return (
-    <div className="p-8">
-      <div className="mb-6 flex items-start justify-between">
-        <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-indigo-50">
+    <div className="p-6 sm:p-8">
+      <div className="mb-5 flex items-start justify-between">
+        <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-indigo-50">
           <ServiceCategoryIcon service={service} />
         </div>
         <span className="inline-flex items-center justify-center rounded-full border border-purple-100 bg-purple-50 px-3 py-1 text-xs font-bold text-purple-600">
           {t("services.itemsBadge", { n: items.length })}
         </span>
       </div>
-      <h3 className="mb-6 text-xl font-bold text-slate-900">{title}</h3>
-      <ul className="space-y-4">
+      <h3 className="mb-5 text-lg font-bold text-slate-900 sm:text-xl">{title}</h3>
+      <ul className="space-y-3">
         {items.map((item) => (
           <li key={item} className="group flex items-start gap-3">
             <CheckCircle2
@@ -83,11 +69,92 @@ function ServiceCategoryInner({ service }: { service: ServiceItem }) {
   );
 }
 
+const DRAG_BUFFER = 28;
+const VELOCITY_THRESHOLD = 400;
+const SPRING = { type: "spring", stiffness: 280, damping: 28 } as const;
+const GAP = 14;
+
+function ServicesMobileCarousel() {
+  const containerRef = useRef<HTMLDivElement | null>(null);
+  const [containerWidth, setContainerWidth] = useState(0);
+  const [position, setPosition] = useState(0);
+  const x = useMotionValue(0);
+  const count = SERVICES.length;
+
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+    const update = () => setContainerWidth(el.clientWidth);
+    update();
+    const ro = new ResizeObserver(update);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
+
+  const cardWidth = Math.max(260, containerWidth - 32);
+  const trackOffset = cardWidth + GAP;
+
+  const onDragEnd = useCallback(
+    (_: unknown, info: PanInfo) => {
+      const dir =
+        info.offset.x < -DRAG_BUFFER || info.velocity.x < -VELOCITY_THRESHOLD
+          ? 1
+          : info.offset.x > DRAG_BUFFER || info.velocity.x > VELOCITY_THRESHOLD
+            ? -1
+            : 0;
+      if (dir === 0) return;
+      setPosition((p) => Math.max(0, Math.min(p + dir, count - 1)));
+    },
+    [count],
+  );
+
+  return (
+    <div
+      ref={containerRef}
+      className="relative w-full overflow-hidden rounded-3xl border border-indigo-200/60 bg-white/60 p-4 shadow-sm ring-1 ring-indigo-100/50 backdrop-blur-lg"
+      data-lenis-prevent-touch
+    >
+      <motion.div
+        className="flex cursor-grab active:cursor-grabbing"
+        drag="x"
+        dragConstraints={{ left: -trackOffset * (count - 1), right: 0 }}
+        style={{ gap: `${GAP}px`, x }}
+        onDragEnd={onDragEnd}
+        animate={{ x: -(position * trackOffset) }}
+        transition={SPRING}
+      >
+        {SERVICES.map((service) => (
+          <div
+            key={service.category}
+            className="shrink-0 overflow-hidden rounded-2xl border-2 border-indigo-200/90 bg-white shadow-md ring-1 ring-indigo-100/80"
+            style={{ width: cardWidth }}
+          >
+            <ServiceCategoryInner service={service} />
+          </div>
+        ))}
+      </motion.div>
+
+      <div className="mt-4 flex justify-center gap-1.5">
+        {SERVICES.map((service, i) => (
+          <button
+            key={service.category}
+            type="button"
+            className={`h-2 rounded-full transition-all duration-200 ${
+              i === position ? "w-5 bg-indigo-500" : "w-2 bg-slate-300"
+            }`}
+            onClick={() => setPosition(i)}
+            aria-label={`Go to ${service.category}`}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
 export default function ServicesSection() {
   const { t } = useI18n();
   const totalServices = SERVICES.reduce((sum, service) => sum + service.items.length, 0);
   const bgParallax = useParallax({ distance: 56 });
-  const narrowStack = useNarrowViewportForStack();
 
   return (
     <section id="services" className="section-shell relative overflow-hidden">
@@ -125,6 +192,7 @@ export default function ServicesSection() {
           </div>
         </div>
 
+        {/* Desktop: masonry columns */}
         <div className="relative mx-auto hidden max-w-7xl md:block columns-1 [column-gap:2rem] md:columns-2 xl:columns-3">
           {SERVICES.map((service) => (
             <SpotlightCard key={service.category} className="mb-8 break-inside-avoid">
@@ -133,27 +201,10 @@ export default function ServicesSection() {
           ))}
         </div>
 
-        {narrowStack ? (
-          <div className="relative mx-auto h-[min(78dvh,640px)] w-full max-w-lg">
-            <ScrollStack
-              className="h-full"
-              itemDistance={56}
-              itemStackDistance={22}
-              itemScale={0.024}
-              baseScale={0.9}
-              stackPosition="14%"
-              scaleEndPosition="10%"
-            >
-              {SERVICES.map((service) => (
-                <ScrollStackItem key={service.category} itemClassName="scroll-stack-card--service">
-                  <SpotlightCard className="mb-0 h-full min-h-0 shadow-md">
-                    <ServiceCategoryInner service={service} />
-                  </SpotlightCard>
-                </ScrollStackItem>
-              ))}
-            </ScrollStack>
-          </div>
-        ) : null}
+        {/* Mobile: swipeable carousel */}
+        <div className="md:hidden">
+          <ServicesMobileCarousel />
+        </div>
       </div>
     </section>
   );
