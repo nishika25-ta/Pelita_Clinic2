@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { useScroll, useTransform } from "framer-motion";
+import { useScroll, useTransform, type MotionValue } from "framer-motion";
 import SmoothScroll from "../components/layout/SmoothScroll";
 import ScrollReveal from "../components/ui/ScrollReveal";
 import HeroSection from "../components/sections/HeroSection";
@@ -14,10 +14,16 @@ import AppleDock from "../components/layout/AppleDock";
 import SplashScreen from "../components/ui/SplashScreen";
 import LanguageSwitcher from "../components/layout/LanguageSwitcher";
 
+const IS_MOBILE = typeof window !== "undefined" && window.matchMedia("(max-width: 767px)").matches;
+
+const ZERO: MotionValue<string> = { get: () => "0%", set: () => {}, on: () => () => {} } as unknown as MotionValue<string>;
+
 export default function App() {
   const { scrollYProgress } = useScroll();
-  const yHero = useTransform(scrollYProgress, [0, 1], ["0%", "50%"]);
-  const yTestimonial = useTransform(scrollYProgress, [0, 1], ["-20%", "20%"]);
+  const yHeroDesktop = useTransform(scrollYProgress, [0, 1], ["0%", "50%"]);
+  const yTestimonialDesktop = useTransform(scrollYProgress, [0, 1], ["-20%", "20%"]);
+  const yHero = IS_MOBILE ? ZERO : yHeroDesktop;
+  const yTestimonial = IS_MOBILE ? ZERO : yTestimonialDesktop;
   const [splashHandoff, setSplashHandoff] = useState(false);
   const [splashFinished, setSplashFinished] = useState(false);
 

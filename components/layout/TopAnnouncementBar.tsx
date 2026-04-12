@@ -6,7 +6,7 @@ export default function TopAnnouncementBar() {
   if (!isVisible) return null;
 
   return (
-    <div className="relative z-40 border-b border-violet-100/80 bg-white/60 backdrop-blur-xl">
+    <div className="relative z-40 border-b border-violet-100/80 bg-white/90 md:bg-white/60 md:backdrop-blur-xl">
       <div className="container-shell flex min-h-12 items-center gap-3 py-2 text-xs text-slate-700 sm:text-sm">
         <div className="hidden items-center gap-1 rounded-full bg-violet-100 px-2 py-1 font-semibold text-violet-700 sm:flex">
           <Sparkles className="h-3.5 w-3.5" />

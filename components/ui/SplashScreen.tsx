@@ -79,14 +79,14 @@ export default function SplashScreen({ onExitStart, onExitComplete }: SplashScre
           }}
         >
           <motion.div
-            className="absolute left-1/4 top-1/4 h-96 w-96 rounded-full bg-[#0066CC]/15 blur-[100px]"
+            className="absolute left-1/4 top-1/4 h-96 w-96 rounded-full bg-[#0066CC]/15 blur-[100px] max-md:h-48 max-md:w-48 max-md:blur-[60px]"
             aria-hidden
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 1, delay: reduceMotion ? 0 : 0.5 }}
           />
           <motion.div
-            className="absolute bottom-1/4 right-1/4 h-96 w-96 rounded-full bg-[#FF7A00]/10 blur-[100px]"
+            className="absolute bottom-1/4 right-1/4 h-96 w-96 rounded-full bg-[#FF7A00]/10 blur-[100px] max-md:h-48 max-md:w-48 max-md:blur-[60px]"
             aria-hidden
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}

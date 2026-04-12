@@ -104,8 +104,8 @@ export default function PanelsSection() {
         className="pointer-events-none absolute inset-0 overflow-hidden"
         aria-hidden
       >
-        <div className="absolute -right-24 top-24 h-72 w-72 rounded-full bg-violet-300/25 blur-3xl" />
-        <div className="absolute -left-16 bottom-32 h-64 w-64 rounded-full bg-cyan-200/20 blur-3xl" />
+        <div className="absolute -right-24 top-24 h-72 w-72 rounded-full bg-violet-300/25 blur-3xl max-md:hidden" />
+        <div className="absolute -left-16 bottom-32 h-64 w-64 rounded-full bg-cyan-200/20 blur-3xl max-md:hidden" />
       </motion.div>
       <div className="container-shell relative z-10">
         <div className="glass-card-strong overflow-hidden border border-violet-300/50 bg-white/90 p-8 shadow-[0_20px_50px_-18px_rgba(91,33,182,0.18)] ring-1 ring-violet-200/40 sm:p-10">

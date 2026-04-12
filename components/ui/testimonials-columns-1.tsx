@@ -28,7 +28,7 @@ export function TestimonialReviewCard({ item, className }: TestimonialReviewCard
   return (
     <article
       className={cn(
-        "relative w-full overflow-hidden rounded-2xl border border-violet-200/35 bg-gradient-to-br from-white/95 via-violet-50/25 to-white/90 p-5 shadow-[0_20px_50px_-18px_rgba(91,33,182,0.22)] ring-1 ring-white/70 backdrop-blur-md",
+        "relative w-full overflow-hidden rounded-2xl border border-violet-200/35 bg-gradient-to-br from-white/95 via-violet-50/25 to-white/90 p-5 shadow-[0_20px_50px_-18px_rgba(91,33,182,0.22)] ring-1 ring-white/70 md:backdrop-blur-md",
         className,
       )}
       aria-label={t("testimonials.testimonialAria")}
@@ -65,13 +65,20 @@ export function TestimonialReviewCard({ item, className }: TestimonialReviewCard
   );
 }
 
-/**
- * Vertical infinite scroll column. Content is duplicated so translating by -50%
- * loops seamlessly. Uses `framer-motion` (same animation API as `motion` / `motion/react`).
- */
-export function TestimonialsColumn({ className, testimonials, duration = 15 }: TestimonialsColumnProps) {
-  const loop = [...testimonials, ...testimonials];
+const IS_MOBILE = typeof window !== "undefined" && window.matchMedia("(max-width: 767px)").matches;
 
+export function TestimonialsColumn({ className, testimonials, duration = 15 }: TestimonialsColumnProps) {
+  if (IS_MOBILE) {
+    return (
+      <div className={`flex flex-col gap-5 ${className ?? ""}`}>
+        {testimonials.map((item, i) => (
+          <TestimonialReviewCard key={`tcol-${i}`} item={item} className="max-w-xs" />
+        ))}
+      </div>
+    );
+  }
+
+  const loop = [...testimonials, ...testimonials];
   return (
     <div
       className={`h-[min(560px,62svh)] overflow-hidden [mask-image:linear-gradient(to_bottom,transparent_0%,black_10%,black_90%,transparent_100%)] [-webkit-mask-image:linear-gradient(to_bottom,transparent_0%,black_10%,black_90%,transparent_100%)] ${className ?? ""}`}

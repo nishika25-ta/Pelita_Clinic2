@@ -28,7 +28,7 @@ export default function ProfileSection() {
     <section id="profile" className="section-shell overflow-hidden">
       <div className="container-shell grid items-start gap-8 lg:grid-cols-[1.05fr_0.95fr]">
         <motion.div ref={ref} style={{ y }} className="relative w-full">
-          <div className="absolute inset-0 -translate-x-10 translate-y-10 transform rounded-full bg-violet-100 opacity-60 blur-3xl" />
+          <div className="absolute inset-0 -translate-x-10 translate-y-10 transform rounded-full bg-violet-100 opacity-60 blur-3xl max-md:hidden" />
           <div
             className="relative aspect-[4/5] overflow-hidden rounded-3xl border-4 border-white shadow-2xl"
             role="region"
@@ -62,7 +62,7 @@ export default function ProfileSection() {
                   preload="metadata"
                   aria-label={t("profile.videoAria")}
                 />
-                <p className="pointer-events-none absolute left-3 top-3 rounded-lg bg-black/55 px-2 py-1 text-xs font-semibold uppercase tracking-wide text-white backdrop-blur-sm">
+                <p className="pointer-events-none absolute left-3 top-3 rounded-lg bg-black/65 px-2 py-1 text-xs font-semibold uppercase tracking-wide text-white md:bg-black/55 md:backdrop-blur-sm">
                   {t("profile.drVideoBadge")}
                 </p>
               </div>
@@ -72,7 +72,7 @@ export default function ProfileSection() {
               <button
                 type="button"
                 onClick={() => go(-1)}
-                className="pointer-events-auto inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/30 bg-black/40 text-white shadow-lg backdrop-blur-md transition hover:bg-black/55 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+                className="pointer-events-auto inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/30 bg-black/50 text-white shadow-lg md:bg-black/40 md:backdrop-blur-md transition hover:bg-black/55 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
                 aria-label={t("profile.prevSlide")}
               >
                 <ChevronLeft className="h-5 w-5" aria-hidden />
@@ -80,7 +80,7 @@ export default function ProfileSection() {
               <button
                 type="button"
                 onClick={() => go(1)}
-                className="pointer-events-auto inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/30 bg-black/40 text-white shadow-lg backdrop-blur-md transition hover:bg-black/55 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+                className="pointer-events-auto inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/30 bg-black/50 text-white shadow-lg md:bg-black/40 md:backdrop-blur-md transition hover:bg-black/55 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
                 aria-label={t("profile.nextSlide")}
               >
                 <ChevronRight className="h-5 w-5" aria-hidden />

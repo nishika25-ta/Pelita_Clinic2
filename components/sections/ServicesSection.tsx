@@ -111,7 +111,7 @@ function ServicesMobileCarousel() {
   return (
     <div
       ref={containerRef}
-      className="relative w-full overflow-hidden rounded-3xl border border-indigo-200/60 bg-white/60 p-4 shadow-sm ring-1 ring-indigo-100/50 backdrop-blur-lg"
+      className="relative w-full overflow-hidden rounded-3xl border border-indigo-200/60 bg-white/80 p-4 shadow-sm ring-1 ring-indigo-100/50"
       data-lenis-prevent-touch
     >
       <motion.div
@@ -166,7 +166,7 @@ export default function ServicesSection() {
       />
       <div className="container-shell">
         <div className="relative mx-auto mb-12 max-w-7xl md:mb-16">
-          <div className="rounded-[2.5rem] border-2 border-indigo-200/85 bg-white/70 p-8 shadow-md shadow-slate-300/20 ring-1 ring-indigo-100/70 backdrop-blur-xl md:p-12">
+            <div className="rounded-[2.5rem] border-2 border-indigo-200/85 bg-white/70 p-8 shadow-md shadow-slate-300/20 ring-1 ring-indigo-100/70 md:backdrop-blur-xl md:p-12">
             <div className="flex flex-col justify-between gap-8 lg:flex-row lg:items-end">
               <div className="max-w-2xl">
                 <span className="mb-3 block text-xs font-bold uppercase tracking-widest text-indigo-500">

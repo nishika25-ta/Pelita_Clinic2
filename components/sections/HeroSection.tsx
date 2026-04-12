@@ -53,7 +53,7 @@ type HeroSlide =
 function HighlightIconBadge({ id }: { id: HeroHighlightId }) {
   const Icon = HIGHLIGHT_ICONS[id];
   return (
-    <div className="mb-6 flex h-14 w-14 items-center justify-center rounded-2xl border border-white/20 bg-white/10 text-white shadow-lg backdrop-blur-md">
+    <div className="mb-6 flex h-14 w-14 items-center justify-center rounded-2xl border border-white/20 bg-white/10 text-white shadow-lg md:backdrop-blur-md">
       <Icon className="h-7 w-7" strokeWidth={1.5} aria-hidden />
     </div>
   );
@@ -168,7 +168,7 @@ export default function HeroSection({ yHero, splashReveal }: HeroSectionProps) {
               muted
               loop
               playsInline
-              preload="auto"
+              preload="metadata"
               poster="/poster1.jpeg"
               disablePictureInPicture
               aria-hidden
@@ -281,7 +281,7 @@ export default function HeroSection({ yHero, splashReveal }: HeroSectionProps) {
             <button
               type="button"
               onClick={() => go(-1)}
-              className="pointer-events-auto inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/25 bg-black/30 text-white shadow-lg backdrop-blur-md transition hover:border-white/45 hover:bg-black/45 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white/80"
+              className="pointer-events-auto inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/25 bg-black/40 text-white shadow-lg md:bg-black/30 md:backdrop-blur-md transition hover:border-white/45 hover:bg-black/45 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white/80"
               aria-label={t("hero.prev")}
             >
               <ChevronLeft className="h-6 w-6" aria-hidden />
@@ -289,7 +289,7 @@ export default function HeroSection({ yHero, splashReveal }: HeroSectionProps) {
             <button
               type="button"
               onClick={() => go(1)}
-              className="pointer-events-auto inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/25 bg-black/30 text-white shadow-lg backdrop-blur-md transition hover:border-white/45 hover:bg-black/45 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white/80"
+              className="pointer-events-auto inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/25 bg-black/40 text-white shadow-lg md:bg-black/30 md:backdrop-blur-md transition hover:border-white/45 hover:bg-black/45 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white/80"
               aria-label={t("hero.next")}
             >
               <ChevronRight className="h-6 w-6" aria-hidden />
@@ -301,7 +301,7 @@ export default function HeroSection({ yHero, splashReveal }: HeroSectionProps) {
       <div className="pointer-events-none absolute inset-x-0 bottom-0 z-30 flex justify-center pb-[max(1rem,env(safe-area-inset-bottom))]">
         <motion.a
           href="#services"
-          className="pointer-events-auto inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/25 bg-white/10 text-white/80 shadow-lg backdrop-blur-md transition hover:border-white/40 hover:bg-white/15 hover:text-white"
+          className="pointer-events-auto inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/25 bg-white/15 text-white/80 shadow-lg md:bg-white/10 md:backdrop-blur-md transition hover:border-white/40 hover:bg-white/15 hover:text-white"
           aria-label={t("hero.scrollServices")}
           initial={{ opacity: 0, y: 8 }}
           animate={heroReady ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}

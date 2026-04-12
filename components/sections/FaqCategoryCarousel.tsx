@@ -113,7 +113,7 @@ export function FaqCategoryCarousel({
     >
       <div className="pointer-events-none absolute inset-0 rounded-[1.25rem] bg-[radial-gradient(120%_80%_at_0%_0%,rgba(255,255,255,0.92),transparent_55%)] sm:rounded-[1.65rem]" aria-hidden />
 
-      <div className="relative rounded-2xl border border-white/60 bg-white/40 p-4 backdrop-blur-sm sm:rounded-2xl sm:p-6 md:p-7">
+      <div className="relative rounded-2xl border border-white/60 bg-white/60 p-4 md:bg-white/40 md:backdrop-blur-sm sm:rounded-2xl sm:p-6 md:p-7">
         <div className="mb-4 flex flex-col items-center gap-2 sm:mb-5">
           <span
             className={cn(

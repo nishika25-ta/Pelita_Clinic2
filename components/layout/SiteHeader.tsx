@@ -4,7 +4,7 @@ import { getWhatsAppLink } from "../../utils/contact";
 
 export default function SiteHeader() {
   return (
-    <header className="sticky top-0 z-40 bg-white/80 backdrop-blur-md border-b border-purple-100 shadow-sm pt-[env(safe-area-inset-top,0px)]">
+    <header className="sticky top-0 z-40 bg-white/95 md:bg-white/80 md:backdrop-blur-md border-b border-purple-100 shadow-sm pt-[env(safe-area-inset-top,0px)]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 sm:py-4 flex justify-between items-center">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 bg-purple-400 rounded-lg flex items-center justify-center text-white font-bold text-xl shadow-md">P</div>

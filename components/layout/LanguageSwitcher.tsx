@@ -6,7 +6,7 @@ export default function LanguageSwitcher() {
 
   return (
     <div
-      className="fixed left-[max(0.75rem,env(safe-area-inset-left))] top-[max(0.75rem,env(safe-area-inset-top))] z-[110] flex items-center gap-0.5 rounded-full border border-violet-200/80 bg-white/90 p-1 shadow-lg shadow-violet-200/30 backdrop-blur-md touch-manipulation"
+      className="fixed left-[max(0.75rem,env(safe-area-inset-left))] top-[max(0.75rem,env(safe-area-inset-top))] z-[110] flex items-center gap-0.5 rounded-full border border-violet-200/80 bg-white/95 p-1 shadow-lg shadow-violet-200/30 md:bg-white/90 md:backdrop-blur-md touch-manipulation"
       role="group"
       aria-label={t("langSwitcherAria")}
     >

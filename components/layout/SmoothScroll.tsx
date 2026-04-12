@@ -1,31 +1,39 @@
-import { type ReactNode } from "react";
+import { useMemo, type ReactNode } from "react";
 import { ReactLenis } from "lenis/react";
+import type { LenisOptions } from "lenis";
 
-/** Shared Lenis config — tuned for smooth wheel + anchor jumps (hash links). */
-const lenisOptions = {
+const isMobile = typeof window !== "undefined" && window.matchMedia("(max-width: 767px)").matches;
+
+const baseLenisOptions: LenisOptions = {
   lerp: 0.088,
   wheelMultiplier: 0.92,
-  touchMultiplier: 1.08,
   smoothWheel: true,
-  syncTouch: true,
-  syncTouchLerp: 0.075,
   autoRaf: true,
   anchors: true,
-  /** Lets `overflow: auto` regions (e.g. hero card stacks) receive wheel/touch instead of Lenis. */
   allowNestedScroll: true,
-} as const;
+};
+
+const desktopOptions: LenisOptions = {
+  ...baseLenisOptions,
+  touchMultiplier: 1.08,
+  syncTouch: true,
+  syncTouchLerp: 0.075,
+};
+
+const mobileOptions: LenisOptions = {
+  ...baseLenisOptions,
+  touchMultiplier: 1,
+  syncTouch: false,
+};
 
 interface SmoothScrollProps {
   children: ReactNode;
 }
 
-/**
- * Global Lenis smooth scroll (root instance). Pairs with Framer Motion `useScroll` /
- * `useTransform` parallax on the page.
- */
 export default function SmoothScroll({ children }: SmoothScrollProps) {
+  const options = useMemo(() => (isMobile ? mobileOptions : desktopOptions), []);
   return (
-    <ReactLenis root options={lenisOptions}>
+    <ReactLenis root options={options}>
       {children}
     </ReactLenis>
   );
