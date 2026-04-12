@@ -8,6 +8,21 @@
   will-change: transform;
 }
 
+/* Full-bleed hero video — crisp cover without blur; slight scale hides sub-pixel edges on parallax. */
+.hero-bg-video {
+  transform: scale(1.04);
+  transform-origin: center center;
+}
+
+/* Poster slides: readable typography, letterboxed on ultrawide. */
+.hero-poster-img {
+  width: 100%;
+  height: auto;
+  max-height: min(78dvh, 880px);
+  object-fit: contain;
+  object-position: center top;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .hero-parallax-layer {
     will-change: auto;

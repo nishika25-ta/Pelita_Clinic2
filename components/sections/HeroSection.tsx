@@ -161,13 +161,14 @@ export default function HeroSection({ yHero, splashReveal }: HeroSectionProps) {
           <div className="absolute inset-0 z-0 overflow-hidden">
             <video
               ref={heroVideoRef}
-              className="absolute left-1/2 top-1/2 z-0 min-h-[105%] min-w-[105%] -translate-x-1/2 -translate-y-1/2 object-cover blur-[2px] contrast-[1.05] saturate-[1.05] transition-opacity duration-500"
-              style={{ opacity: showVideo ? 0.95 : 0 }}
+              className="hero-bg-video absolute inset-0 z-0 h-full w-full object-cover object-center transition-opacity duration-500"
+              style={{ opacity: showVideo ? 1 : 0 }}
               autoPlay
               muted
               loop
               playsInline
               preload="auto"
+              poster="/poster1.jpeg"
               disablePictureInPicture
               aria-hidden
             >
@@ -211,15 +212,19 @@ export default function HeroSection({ yHero, splashReveal }: HeroSectionProps) {
               >
                 {slide.kind === "poster" ? (
                   <>
-                    <div className="pointer-events-none absolute inset-0 z-0 bg-neutral-950" aria-hidden />
-                    <img
-                      src={slide.src}
-                      alt={slide.alt}
-                      className="absolute inset-0 z-[1] h-full w-full object-cover object-center"
-                      loading={slide.posterId === "poster-prep" ? "eager" : "lazy"}
-                      decoding="async"
-                      sizes="100vw"
-                    />
+                    <div className="pointer-events-none absolute inset-0 z-0 bg-gradient-to-b from-neutral-950 via-neutral-900 to-black" aria-hidden />
+                    <div className="relative z-[1] flex min-h-[100dvh] min-h-[100svh] w-full items-center justify-center px-4 pb-24 pt-[calc(4.5rem+env(safe-area-inset-top,0px))] sm:px-6 sm:pb-28 sm:pt-[calc(5rem+env(safe-area-inset-top,0px))]">
+                      <div className="hero-poster-frame w-full max-w-[min(100%,28rem)] sm:max-w-[min(100%,36rem)] md:max-w-[min(100%,42rem)]">
+                        <img
+                          src={slide.src}
+                          alt={slide.alt}
+                          className="hero-poster-img block w-full rounded-2xl border border-white/15 bg-black/30 shadow-[0_24px_80px_-20px_rgba(0,0,0,0.85)] ring-1 ring-white/10 sm:rounded-3xl"
+                          loading={slide.posterId === "poster-prep" ? "eager" : "lazy"}
+                          decoding="async"
+                          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 36rem, 42rem"
+                        />
+                      </div>
+                    </div>
                   </>
                 ) : (
                   <>
