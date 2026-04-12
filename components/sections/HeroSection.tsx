@@ -104,7 +104,8 @@ export default function HeroSection({ yHero, splashReveal }: HeroSectionProps) {
   }, [heroReady, activeIndex]);
 
   useEffect(() => {
-    if (reduceMotion || autoPaused) {
+    const isMobile = window.matchMedia("(max-width: 767px)").matches;
+    if (reduceMotion || autoPaused || isMobile) {
       if (autoTimerRef.current) {
         clearInterval(autoTimerRef.current);
         autoTimerRef.current = null;
