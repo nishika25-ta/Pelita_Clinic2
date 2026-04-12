@@ -16,6 +16,7 @@ import { useI18n } from "../../contexts/I18nContext";
 import type { ServiceItem } from "../../types/clinic";
 import { SERVICES } from "../../config/clinicData";
 import { SpotlightCard } from "../ui/SpotlightCard";
+import { useNarrowViewportForStack } from "../../utils/useNarrowViewport";
 import { useParallax } from "../../utils/useParallax";
 import ScrollStack, { ScrollStackItem } from "../ui/ScrollStack";
 
@@ -86,6 +87,7 @@ export default function ServicesSection() {
   const { t } = useI18n();
   const totalServices = SERVICES.reduce((sum, service) => sum + service.items.length, 0);
   const bgParallax = useParallax({ distance: 56 });
+  const narrowStack = useNarrowViewportForStack();
 
   return (
     <section id="services" className="section-shell relative overflow-hidden">
@@ -131,25 +133,27 @@ export default function ServicesSection() {
           ))}
         </div>
 
-        <div className="relative mx-auto h-[min(78dvh,640px)] w-full max-w-lg md:hidden">
-          <ScrollStack
-            className="h-full"
-            itemDistance={56}
-            itemStackDistance={22}
-            itemScale={0.024}
-            baseScale={0.9}
-            stackPosition="14%"
-            scaleEndPosition="10%"
-          >
-            {SERVICES.map((service) => (
-              <ScrollStackItem key={service.category} itemClassName="scroll-stack-card--service">
-                <SpotlightCard className="mb-0 h-full min-h-0 shadow-md">
-                  <ServiceCategoryInner service={service} />
-                </SpotlightCard>
-              </ScrollStackItem>
-            ))}
-          </ScrollStack>
-        </div>
+        {narrowStack ? (
+          <div className="relative mx-auto h-[min(78dvh,640px)] w-full max-w-lg">
+            <ScrollStack
+              className="h-full"
+              itemDistance={56}
+              itemStackDistance={22}
+              itemScale={0.024}
+              baseScale={0.9}
+              stackPosition="14%"
+              scaleEndPosition="10%"
+            >
+              {SERVICES.map((service) => (
+                <ScrollStackItem key={service.category} itemClassName="scroll-stack-card--service">
+                  <SpotlightCard className="mb-0 h-full min-h-0 shadow-md">
+                    <ServiceCategoryInner service={service} />
+                  </SpotlightCard>
+                </ScrollStackItem>
+              ))}
+            </ScrollStack>
+          </div>
+        ) : null}
       </div>
     </section>
   );

@@ -6,7 +6,9 @@
   overflow-x: visible;
   overscroll-behavior: contain;
   -webkit-overflow-scrolling: touch;
-  scroll-behavior: smooth;
+  /* `smooth` fights native nested scroll + Lenis; keep stacking in sync with scrollTop. */
+  scroll-behavior: auto;
+  touch-action: pan-y;
   -webkit-transform: translateZ(0);
   transform: translateZ(0);
   will-change: scroll-position;

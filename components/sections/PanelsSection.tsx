@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { useI18n } from "../../contexts/I18nContext";
 import { PANELS } from "../../config/clinicData";
+import { useNarrowViewportForStack } from "../../utils/useNarrowViewport";
 import { useParallax } from "../../utils/useParallax";
 import ScrollStack, { ScrollStackItem } from "../ui/ScrollStack";
 
@@ -53,6 +54,7 @@ function PanelCard({ panel }: { panel: string }) {
 export default function PanelsSection() {
   const { t } = useI18n();
   const decor = useParallax({ distance: 44 });
+  const narrowStack = useNarrowViewportForStack();
 
   return (
     <section id="panels" className="section-shell relative overflow-hidden pt-8" aria-labelledby="panels-heading">
@@ -85,23 +87,25 @@ export default function PanelsSection() {
             ))}
           </ul>
 
-          <div className="relative mx-auto mt-2 h-[min(72dvh,560px)] w-full max-w-lg md:hidden">
-            <ScrollStack
-              className="h-full"
-              itemDistance={64}
-              itemStackDistance={24}
-              itemScale={0.026}
-              baseScale={0.88}
-              stackPosition="16%"
-              scaleEndPosition="11%"
-            >
-              {PANELS.map((panel) => (
-                <ScrollStackItem key={panel} itemClassName="scroll-stack-card--panel">
-                  <PanelCard panel={panel} />
-                </ScrollStackItem>
-              ))}
-            </ScrollStack>
-          </div>
+          {narrowStack ? (
+            <div className="relative mx-auto mt-2 h-[min(72dvh,560px)] w-full max-w-lg">
+              <ScrollStack
+                className="h-full"
+                itemDistance={64}
+                itemStackDistance={24}
+                itemScale={0.026}
+                baseScale={0.88}
+                stackPosition="16%"
+                scaleEndPosition="11%"
+              >
+                {PANELS.map((panel) => (
+                  <ScrollStackItem key={panel} itemClassName="scroll-stack-card--panel">
+                    <PanelCard panel={panel} />
+                  </ScrollStackItem>
+                ))}
+              </ScrollStack>
+            </div>
+          ) : null}
         </div>
       </div>
     </section>

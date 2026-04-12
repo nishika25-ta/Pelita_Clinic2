@@ -11,6 +11,8 @@ const lenisOptions = {
   syncTouchLerp: 0.075,
   autoRaf: true,
   anchors: true,
+  /** Lets `overflow: auto` regions (e.g. hero card stacks) receive wheel/touch instead of Lenis. */
+  allowNestedScroll: true,
 } as const;
 
 interface SmoothScrollProps {

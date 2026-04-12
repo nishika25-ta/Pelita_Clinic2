@@ -286,7 +286,12 @@ export default function ScrollStack({
   ]);
 
   return (
-    <div className={`scroll-stack-scroller ${className}`.trim()} ref={scrollerRef}>
+    <div
+      className={`scroll-stack-scroller ${className}`.trim()}
+      ref={scrollerRef}
+      data-lenis-prevent-touch
+      data-lenis-prevent-wheel
+    >
       <div className="scroll-stack-inner">
         {children}
         <div className="scroll-stack-end" />
