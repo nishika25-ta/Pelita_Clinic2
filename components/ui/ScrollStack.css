@@ -1,10 +1,6 @@
-/* Scroller: layout + touch; motion/smooth scroll mostly from ScrollStack inline + Lenis. */
+/* ScrollStack — inner scroller touch-action and per-variant card sizes. */
 .scroll-stack-scroller {
   touch-action: pan-y;
-}
-
-.scroll-stack-card-wrapper {
-  position: relative;
 }
 
 .scroll-stack-card {
@@ -15,19 +11,23 @@
   position: relative;
 }
 
+/* Panel cards: auto height, no inner padding (PanelCard provides its own). */
 .scroll-stack-card.scroll-stack-card--panel {
   height: auto;
-  min-height: 13rem;
-  margin: 20px 0;
+  min-height: 12rem;
+  margin-top: 20px;
+  margin-bottom: 20px;
   padding: 0;
   overflow: hidden;
   border-radius: 28px;
 }
 
+/* Service cards: auto height, no inner padding (SpotlightCard provides its own). */
 .scroll-stack-card.scroll-stack-card--service {
   height: auto;
   min-height: 14rem;
-  margin: 22px 0;
+  margin-top: 22px;
+  margin-bottom: 22px;
   padding: 0;
   overflow: hidden;
   border-radius: 32px;
@@ -36,12 +36,4 @@
 .scroll-stack-end {
   width: 100%;
   height: 1px;
-}
-
-@media (max-width: 767px) {
-  .scroll-stack-card.scroll-stack-card--panel,
-  .scroll-stack-card.scroll-stack-card--service {
-    margin-top: 18px;
-    margin-bottom: 18px;
-  }
 }
