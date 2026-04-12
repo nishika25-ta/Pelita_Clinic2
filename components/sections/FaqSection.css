@@ -1,0 +1,18 @@
+.faq-details summary::-webkit-details-marker {
+  display: none;
+}
+
+.faq-details summary {
+  list-style: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.faq-details[open] .faq-chevron {
+  transform: rotate(180deg);
+}
+
+.faq-details[open] .faq-icon-ring {
+  border-color: rgb(167 139 250 / 0.85);
+  background-color: rgb(237 233 254 / 0.95);
+  color: rgb(91 33 182);
+}

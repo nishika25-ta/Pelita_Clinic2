@@ -1,85 +1,124 @@
-import { useState } from "react";
-import { Activity, Baby, Bug, CheckCircle2, HeartPulse, ShieldAlert, Stethoscope, Syringe } from "lucide-react";
+import { motion } from "framer-motion";
+import {
+  Activity,
+  Baby,
+  CheckCircle2,
+  Droplets,
+  HeartPulse,
+  Microscope,
+  Scissors,
+  ShieldPlus,
+  Stethoscope,
+  Syringe,
+  UserRound,
+} from "lucide-react";
+import { useI18n } from "../../contexts/I18nContext";
+import type { ServiceItem } from "../../types/clinic";
 import { SERVICES } from "../../config/clinicData";
+import { SpotlightCard } from "../ui/SpotlightCard";
+import { useParallax } from "../../utils/useParallax";
 
-const iconClass = "w-6 h-6 text-purple-400";
-const iconMap = {
-  stethoscope: <Stethoscope className={iconClass} />,
-  activity: <Activity className={iconClass} />,
-  bug: <Bug className={iconClass} />,
-  syringe: <Syringe className={iconClass} />,
-  baby: <Baby className={iconClass} />,
-  heartPulse: <HeartPulse className={iconClass} />,
-  shieldAlert: <ShieldAlert className={iconClass} />,
-};
+const iconClass = "h-6 w-6 text-indigo-500";
+
+function ServiceCategoryIcon({ service }: { service: ServiceItem }) {
+  if (service.category === "Women's Health") {
+    return <UserRound className={iconClass} aria-hidden />;
+  }
+  if (service.category === "Sexual Health") {
+    return <ShieldPlus className={iconClass} aria-hidden />;
+  }
+  switch (service.iconName) {
+    case "stethoscope":
+      return <Stethoscope className={iconClass} aria-hidden />;
+    case "activity":
+      return <Activity className={iconClass} aria-hidden />;
+    case "bug":
+      return <Microscope className={iconClass} aria-hidden />;
+    case "syringe":
+      return <Syringe className={iconClass} aria-hidden />;
+    case "baby":
+      return <Baby className={iconClass} aria-hidden />;
+    case "heartPulse":
+      return <HeartPulse className={iconClass} aria-hidden />;
+    case "shieldAlert":
+      return <Droplets className={iconClass} aria-hidden />;
+    case "scissors":
+      return <Scissors className={iconClass} aria-hidden />;
+    default:
+      return <Stethoscope className={iconClass} aria-hidden />;
+  }
+}
 
 export default function ServicesSection() {
-  const [expanded, setExpanded] = useState<Record<string, boolean>>({});
+  const { t, localizeService } = useI18n();
   const totalServices = SERVICES.reduce((sum, service) => sum + service.items.length, 0);
-
-  const toggleExpanded = (category: string) => {
-    setExpanded((prev) => ({ ...prev, [category]: !prev[category] }));
-  };
+  const bgParallax = useParallax({ distance: 56 });
 
   return (
     <section id="services" className="section-shell relative overflow-hidden">
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-72 bg-gradient-to-b from-violet-200/30 to-transparent" aria-hidden />
+      <motion.div
+        ref={bgParallax.ref}
+        style={{ y: bgParallax.y }}
+        className="pointer-events-none absolute inset-x-0 top-0 h-80 bg-gradient-to-b from-violet-300/35 via-fuchsia-200/20 to-transparent"
+        aria-hidden
+      />
       <div className="container-shell">
-        <div className="glass-card-strong relative mx-auto mb-10 max-w-5xl p-6 md:p-8">
-          <div className="grid gap-6 md:grid-cols-[1.2fr_0.8fr] md:items-center">
-            <div>
-              <p className="section-subtitle mb-2">Section 2</p>
-              <h2 className="section-title mb-3">Comprehensive Services Available</h2>
-              <p className="text-slate-600">
-                From everyday consultation to chronic care and women&apos;s or children&apos;s health, every service is grouped clearly so patients can find what they need fast.
-              </p>
-            </div>
-            <div className="grid grid-cols-2 gap-3">
-              <div className="rounded-2xl border border-violet-100 bg-white/90 px-4 py-3">
-                <p className="text-xs uppercase tracking-[0.12em] text-violet-600">Categories</p>
-                <p className="mt-1 text-2xl font-bold text-slate-900">{SERVICES.length}</p>
+        <div className="relative mx-auto mb-12 max-w-7xl md:mb-16">
+          <div className="rounded-[2.5rem] border-2 border-indigo-200/85 bg-white/70 p-8 shadow-md shadow-slate-300/20 ring-1 ring-indigo-100/70 backdrop-blur-xl md:p-12">
+            <div className="flex flex-col justify-between gap-8 lg:flex-row lg:items-end">
+              <div className="max-w-2xl">
+                <span className="mb-3 block text-xs font-bold uppercase tracking-widest text-indigo-500">
+                  {t("services.section")}
+                </span>
+                <h2 className="mb-6 text-3xl font-extrabold tracking-tight text-slate-900 md:text-4xl lg:text-5xl">
+                  {t("services.titleLine1")} <br className="hidden md:block" />
+                  {t("services.titleLine2")}
+                </h2>
+                <p className="text-lg leading-relaxed text-slate-600">{t("services.desc")}</p>
               </div>
-              <div className="rounded-2xl border border-violet-100 bg-white/90 px-4 py-3">
-                <p className="text-xs uppercase tracking-[0.12em] text-violet-600">Total Services</p>
-                <p className="mt-1 text-2xl font-bold text-slate-900">{totalServices}</p>
+              <div className="flex flex-wrap gap-4">
+                <div className="min-w-[140px] rounded-2xl border-2 border-indigo-200/80 bg-white p-6 shadow-sm ring-1 ring-slate-200/60">
+                  <p className="mb-1 text-xs font-bold uppercase tracking-wider text-slate-400">{t("services.categoriesLabel")}</p>
+                  <p className="text-4xl font-black text-slate-800">{SERVICES.length}</p>
+                </div>
+                <div className="min-w-[140px] rounded-2xl border-2 border-indigo-200/80 bg-white p-6 shadow-sm ring-1 ring-slate-200/60">
+                  <p className="mb-1 text-xs font-bold uppercase tracking-wider text-slate-400">{t("services.totalServicesLabel")}</p>
+                  <p className="text-4xl font-black text-slate-800">{totalServices}</p>
+                </div>
               </div>
             </div>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
-          {SERVICES.map((service) => (
-            <article
-              key={service.category}
-              className="glass-card group p-6 transition-all hover:-translate-y-1 hover:shadow-xl hover:shadow-violet-200/30"
-            >
-              <div className="mb-4 flex items-start justify-between gap-3">
-                <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-violet-100 bg-white shadow-sm transition-transform group-hover:scale-110">
-                  {iconMap[service.iconName as keyof typeof iconMap]}
+        <div className="mx-auto max-w-7xl columns-1 [column-gap:2rem] md:columns-2 xl:columns-3">
+          {SERVICES.map((service) => {
+            const { title, items } = localizeService(service);
+            return (
+              <SpotlightCard key={service.category} className="mb-8 break-inside-avoid">
+                <div className="p-8">
+                  <div className="mb-6 flex items-start justify-between">
+                    <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-indigo-50">
+                      <ServiceCategoryIcon service={service} />
+                    </div>
+                    <span className="inline-flex items-center justify-center rounded-full border border-purple-100 bg-purple-50 px-3 py-1 text-xs font-bold text-purple-600">
+                      {t("services.itemsBadge", { n: items.length })}
+                    </span>
+                  </div>
+                  <h3 className="mb-6 text-xl font-bold text-slate-900">{title}</h3>
+                  <ul className="space-y-4">
+                    {items.map((item) => (
+                      <li key={item} className="group flex items-start gap-3">
+                        <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-indigo-200 transition-colors group-hover:text-indigo-500" aria-hidden />
+                        <span className="text-sm leading-relaxed text-slate-600 transition-colors group-hover:text-slate-900">
+                          {item}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
-                <span className="rounded-full border border-violet-200 bg-violet-50 px-3 py-1 text-xs font-semibold text-violet-700">
-                  {service.items.length} items
-                </span>
-              </div>
-              <h4 className="mb-3 text-lg font-bold text-slate-900">{service.category}</h4>
-              <ul className="space-y-2.5 text-sm">
-                {(expanded[service.category] ? service.items : service.items.slice(0, 4)).map((item) => (
-                  <li key={item} className="flex items-start gap-2 leading-relaxed text-slate-600">
-                    <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-violet-500" />
-                    <span>{item}</span>
-                  </li>
-                ))}
-              </ul>
-              {service.items.length > 4 && (
-                <button
-                  onClick={() => toggleExpanded(service.category)}
-                  className="mt-4 text-sm font-semibold text-violet-700 transition hover:text-violet-900"
-                >
-                  {expanded[service.category] ? "Show less" : `Show all ${service.items.length} services`}
-                </button>
-              )}
-            </article>
-          ))}
+              </SpotlightCard>
+            );
+          })}
         </div>
       </div>
     </section>

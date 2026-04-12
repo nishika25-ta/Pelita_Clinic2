@@ -1,20 +1,27 @@
+import { useMemo } from "react";
+import { useI18n } from "../../contexts/I18nContext";
 import { CLINIC_INFO } from "../../config/clinicData";
 import { getWhatsAppLink } from "../../utils/contact";
 import { Phone, Mail, MapPin, ExternalLink, Globe, Share2 } from "lucide-react";
 import "./SiteFooter.css";
 
 export default function SiteFooter() {
+  const { t } = useI18n();
   const whatsappUrl = getWhatsAppLink(CLINIC_INFO.phone);
   const currentYear = new Date().getFullYear();
 
-  const NAV_LINKS = [
-    { label: "Home", href: "#home" },
-    { label: "Services", href: "#services" },
-    { label: "Panels", href: "#panels" },
-    { label: "Doctor", href: "#profile" },
-    { label: "Reviews", href: "#testimonials" },
-    { label: "Contact", href: "#contact" },
-  ];
+  const NAV_LINKS = useMemo(
+    () => [
+      { label: t("footer.navHome"), href: "#home" },
+      { label: t("footer.navServices"), href: "#services" },
+      { label: t("footer.navPanels"), href: "#panels" },
+      { label: t("footer.navDoctor"), href: "#profile" },
+      { label: t("footer.navReviews"), href: "#reviews" },
+      { label: t("footer.navContact"), href: "#contact" },
+      { label: t("footer.navFaq"), href: "#faq" },
+    ],
+    [t],
+  );
 
   return (
     <footer className="site-footer">
@@ -31,12 +38,10 @@ export default function SiteFooter() {
               />
               <div>
                 <p className="footer-name">{CLINIC_INFO.name}</p>
-                <p className="footer-tagline">Miri family clinic</p>
+                <p className="footer-tagline">{t("footer.tagline")}</p>
               </div>
             </div>
-            <p className="footer-blurb">
-              Compassionate care for general, women&apos;s, and children&apos;s health in Miri.
-            </p>
+            <p className="footer-blurb">{t("footer.blurb")}</p>
             <div className="footer-socials">
               <a href="https://facebook.com" className="footer-social" aria-label="Facebook">
                 <Globe size={17} strokeWidth={1.75} />
@@ -51,7 +56,7 @@ export default function SiteFooter() {
           </div>
 
           <nav className="footer-nav" aria-label="Footer">
-            <p className="footer-label">Site</p>
+            <p className="footer-label">{t("footer.labelSite")}</p>
             <ul className="footer-linklist">
               {NAV_LINKS.map((link) => (
                 <li key={link.href}>
@@ -64,7 +69,7 @@ export default function SiteFooter() {
           </nav>
 
           <div className="footer-contact">
-            <p className="footer-label">Contact</p>
+            <p className="footer-label">{t("footer.labelContact")}</p>
             <ul className="footer-contact-list">
               <li>
                 <a href={whatsappUrl} target="_blank" rel="noreferrer" className="footer-contact-line">
@@ -99,7 +104,7 @@ export default function SiteFooter() {
         <div className="footer-meta">
           <p className="footer-copy">© {currentYear} {CLINIC_INFO.name}</p>
           <p className="footer-scribear">
-            Paws-itively Professional <span className="footer-scribear-dot">•</span> Coded by{" "}
+            {t("footer.scribear")} <span className="footer-scribear-dot">•</span> {t("footer.codedBy")}{" "}
             <a
               href="https://scribear.my/"
               className="footer-scribear-link"

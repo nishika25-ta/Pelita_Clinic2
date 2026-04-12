@@ -192,6 +192,20 @@ export default function MacOSDock({ apps, onAppClick, openApps = [], className =
               >
                 {app.isDivider ? (
                   app.icon
+                ) : app.nativeIcon ? (
+                  <div
+                    className={
+                      app.nativeIconPlain
+                        ? "flex items-center justify-center overflow-visible"
+                        : "flex items-center justify-center overflow-hidden rounded-full bg-white shadow-sm ring-1 ring-slate-900/10"
+                    }
+                    style={{
+                      width: scaledSize * 1.02,
+                      height: scaledSize * 1.02,
+                    }}
+                  >
+                    {app.icon}
+                  </div>
                 ) : (
                   React.cloneElement(app.icon, {
                     size: scaledSize * 0.58,

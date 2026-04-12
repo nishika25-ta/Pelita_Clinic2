@@ -9,7 +9,7 @@ export const CLINIC_INFO: ClinicInfo = {
   mapsLink: "https://maps.app.goo.gl/WmNHbG3qf2wj36Es9",
   hours: ["Mon - Thurs: 8:00am - 12:00pm, 1:30pm - 4:00pm, 6:00pm - 8:00pm", "Fri - Sat: 8:00am - 12:00pm, 1:30pm - 4:00pm"],
   days: "Mon - Sat",
-  holidays: "Selected Public Holiday Close",
+  holidays: "Sunday/Selected Public Holiday : Closed",
   phone: "011-6745 0600",
   email: "pelitaclinicmiri@gmail.com",
   brandColors: { primary: "#c084fc", secondary: "#ffffff" },
@@ -53,42 +53,52 @@ export const DOCTOR_PROFILE: DoctorProfile = {
   ],
   experience: "12+ years",
   languages: "English, Bahasa Melayu, Mandarin",
+  introVideoSrc: "/doctor.mp4",
 };
 
 export const SERVICES: ServiceItem[] = [
   {
     category: "General & Common Illness",
     iconName: "stethoscope",
-    items: ["GP Consultation including acute illness", "Fever, Flu, Sore Throat, Cough", "Diarrhea Treatment, Vomiting", "Ear, Nose & Eye Treatment", "Infectious Diseases", "Urinary Tract Infection","Gastric","Musculoskeletal pain"],
+    items: ["GP Consultation", "Fever, Flu, Sore Throat, Cough", "Diarrhea, Vomiting", "Ear, Nose & Eye Treatment", "Infectious Diseases", "Urinary Tract Infection","Gastric", "Musculoskeletal pain", "Chest Pain"],
   },
-  { category: "Screening & Health Checks", iconName: "activity", items: ["Pre-Employment Check Up", "Health Screening", "STD Screening"] },
+  { category: "Screening & Health Checks", iconName: "activity", items: ["Pre-Employment Check Up", "Health Screening", "Sexually Transmitted Disease Screening", "Medical Check Up", "Vokasiaonal Driving License", "Food Handler Medical Screening"] },
   {
-    category: "Laboratory Test",
+    category: "Other Services",
     iconName: "bug",
-    items: ["Complete Blood Count (CBC/FBC)", "Blood Glucose Test","Electrocardiogram (ECG)", "Urine Testing", "COVID-19 Test", "Influenza", "Dengue test", "Modified Oral Glucose Tolerance Test (OGTT)"],
+    items: ["Complete Blood Count (CBC/FBC)", "Blood Glucose Test","Electrocardiogram (ECG)", "Urine Testing", "Urea Breath Test", "Ultrasound Scan", "4 in 1 Swab (Covid-19,Influenze A+B,RSV)" ,"Dengue Combo Test", "HIV Rapid Test", "Modified Oral Glucose Tolerance Test (MOGTT)", "Nebulizer", "Referral"],
   },
-  { category: "Vaccinations/Immunisations", iconName: "syringe", items: ["Hepatitis B Vaccine", "Influenza Vaccine", "Typhoid Vaccine", "Hepatitis A & B", "Human Papillomavirus (HPV)", "Shingles", "Dengue", "Tetanus"] },
+  { category: "Vaccinations/Immunisations", iconName: "syringe", items: ["Hepatitis B Vaccine", "Hepatitis A Vaccine", "Influenza Vaccine", "Typhoid Vaccine", "Hepatitis A & B", "Human Papillomavirus (HPV)", "Shingles", "Dengue", "Tetanus"] },
   {
     category: "Women's Health",
     iconName: "baby",
-    items: ["Pregnancy Test & Ultrasound Scan", "Pap Smear / Cervical Screening", "Gynaecological Ultrasound", "Menstruation Treatments", "Birth Control/Contraception"],
+    items: ["Pregnancy Test & Ultrasound Scan", "Pap Smear / Cervical Screening", "Gynaecological Ultrasound", "Menstruation Treatments", "Birth Control/Contraception", "Breast Examination"],
   },
   {
     category: "Children's Health",
     iconName: "baby",
-    items: ["Referral", "Nebulisation Therapy"],
+    items: ["Acute Illness", "Immunsation/vaccination"],
   },
   {
     category: "Chronic Illness Management",
     iconName: "heartPulse",
-    items: ["Diabetes Treatment", "High Blood Pressure", "High Cholesterol", "Asthma Treatment", "Osteoarthritis Treatment"],
+    items: ["Diabetes", "Hypertension", "High Cholesterol", "Asthma Treatment", "Osteoarthritis Treatment", "Weight Management"],
   },
   {
     category: "Skin & Infections",
     iconName: "shieldAlert",
-    items: ["Acne Treatment", "Eczema", "Fungal & Skin Infection", "Scabies Treatment", "Wound Care & Suturing"],
+    items: ["Acne Treatment", "Eczema", "Fungal & Skin Infection", "Scabies Treatment"],
   },
-  { category: "Sexual Health", iconName: "heartPulse", items: ["STD/STI Treatment", "HIV Preventive Treatment/PrEP", "Gonorrhea & Syphilis","Chlamydia Test & Treatment"] },
+  {
+    category: "Minor Surgery & Procedure",
+    iconName: "scissors",
+    items: [
+      "Toilet & Suturing",
+      "Ear/Eye Irrigation/Wound Dressing/NG Tube Insertion",
+      "Catheterisation",
+    ],
+  },
+  { category: "Sexual Health", iconName: "heartPulse", items: ["STD/STI Treatment", "HIV Preventive Treatment/PrEP", "Gonorrhea,  Chlamydia Screening & Treatment"] },
 ];
 
 export const PANELS = [
@@ -105,6 +115,7 @@ export const PANELS = [
   "Great Eastern",
   "Public Bank",
   "Grand Palace Hotel Miri",
+  "SAFHIS",
 ];
 
 export const TESTIMONIALS: Testimonial[] = [

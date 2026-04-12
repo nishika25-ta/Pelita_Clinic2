@@ -17,5 +17,5 @@
       "@/*": ["./*"]
     }
   },
-  "include": ["src", "app", "components", "config", "types", "utils", "geminiw.ts"]
+  "include": ["src", "app", "components", "config", "contexts", "locales", "types", "utils", "lib", "geminiw.ts"]
 }

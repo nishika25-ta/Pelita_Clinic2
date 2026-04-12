@@ -1,303 +1,315 @@
-import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { motion, useInView, useReducedMotion, type MotionValue } from "framer-motion";
-import {
-  Briefcase,
-  ChevronDown,
-  ChevronLeft,
-  ChevronRight,
-  Megaphone,
-  Newspaper,
-  Pill,
-  Plus,
-  Stethoscope,
-  Users,
-} from "lucide-react";
+import { ChevronDown, ChevronLeft, ChevronRight, Megaphone, Newspaper, UserPlus } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { useI18n } from "../../contexts/I18nContext";
+import { CLINIC_INFO } from "../../config/clinicData";
+import { HERO_HIGHLIGHTS, HERO_POSTERS, type HeroHighlightId } from "../../config/heroSectionContent";
 import "./HeroSection.css";
-
-const SLIDE_COUNT = 2;
-
-interface HeroUpdateTile {
-  id: string;
-  category: string;
-  title: string;
-  description: string;
-  icon: ReactNode;
-}
-
-const HERO_UPDATE_TILES: HeroUpdateTile[] = [
-  {
-    id: "promotions",
-    category: "Promotions",
-    title: "Screening & seasonal offers",
-    description:
-      "Limited-time bundles on family health screens, travel vaccines, and seasonal check-ups—ask reception or WhatsApp for what’s running now.",
-    icon: <Megaphone className="hero-update-tile__icon-svg" strokeWidth={1.75} aria-hidden />,
-  },
-  {
-    id: "news",
-    category: "News",
-    title: "Inside the practice",
-    description:
-      "New services, equipment, and quality initiatives—short notes on how we’re raising the bar for care in Miri.",
-    icon: <Newspaper className="hero-update-tile__icon-svg" strokeWidth={1.75} aria-hidden />,
-  },
-  {
-    id: "hiring",
-    category: "Hiring",
-    title: "Grow with Pelita",
-    description:
-      "We’re looking for warm, reliable front-desk and clinical support staff. CVs and enquiries welcome via WhatsApp.",
-    icon: <Briefcase className="hero-update-tile__icon-svg" strokeWidth={1.75} aria-hidden />,
-  },
-];
 
 interface HeroSectionProps {
   yHero: MotionValue<string>;
+  splashReveal?: boolean;
 }
 
-const containerVariants = {
+const easeIn = [0.42, 0, 1, 1] as const;
+
+const blockReveal = {
   hidden: {},
   visible: {
-    transition: { staggerChildren: 0.12, delayChildren: 0.2 },
+    transition: { staggerChildren: 0.12, delayChildren: 0.06 },
   },
 };
 
-const itemVariants = {
-  hidden: { opacity: 0, y: 32, filter: "blur(8px)" },
+const fadeUp = {
+  hidden: { opacity: 0, y: 18 },
   visible: {
     opacity: 1,
     y: 0,
-    filter: "blur(0px)",
-    transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] as const },
+    transition: { duration: 0.75, ease: easeIn },
   },
 };
 
-const tileContainerVariants = {
-  hidden: {},
-  visible: {
-    transition: { staggerChildren: 0.08, delayChildren: 0.12 },
-  },
+/** Served from `public/hero.mp4` → `/hero.mp4`. Single instance — only visible on the first slide. */
+const HERO_VIDEO_SRC = "/hero.mp4";
+
+const HIGHLIGHT_ICONS: Record<HeroHighlightId, typeof Megaphone> = {
+  promotions: Megaphone,
+  news: Newspaper,
+  hiring: UserPlus,
 };
 
-const tileVariants = {
-  hidden: { opacity: 0, y: 16 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.45, ease: [0.22, 1, 0.36, 1] as const },
-  },
+const HIGHLIGHT_BG: Record<HeroHighlightId, string> = {
+  promotions: "bg-gradient-to-br from-violet-950 via-purple-950 to-black",
+  news: "bg-gradient-to-br from-slate-900 via-violet-950/95 to-black",
+  hiring: "bg-gradient-to-br from-teal-950/90 via-slate-950 to-black",
 };
 
-const LIVE_LABELS = ["Welcome to Pelita Clinic", "Clinic updates and opportunities"];
+type HeroSlide =
+  | { kind: "main" }
+  | { kind: "poster"; posterId: string; src: string; alt: string }
+  | { kind: "highlight"; id: HeroHighlightId; category: string; title: string; description: string };
 
-export default function HeroSection({ yHero }: HeroSectionProps) {
+function HighlightIconBadge({ id }: { id: HeroHighlightId }) {
+  const Icon = HIGHLIGHT_ICONS[id];
+  return (
+    <div className="mb-6 flex h-14 w-14 items-center justify-center rounded-2xl border border-white/20 bg-white/10 text-white shadow-lg backdrop-blur-md">
+      <Icon className="h-7 w-7" strokeWidth={1.5} aria-hidden />
+    </div>
+  );
+}
+
+export default function HeroSection({ yHero, splashReveal }: HeroSectionProps) {
+  const { t, getHeroHighlight } = useI18n();
   const sectionRef = useRef<HTMLElement>(null);
-  const stageRef = useRef<HTMLDivElement>(null);
-  const isInView = useInView(sectionRef, { once: true, amount: 0.12 });
+  const heroVideoRef = useRef<HTMLVideoElement>(null);
+  const isInView = useInView(sectionRef, { once: true, amount: 0.08 });
   const reduceMotion = useReducedMotion();
-  const [activeSlide, setActiveSlide] = useState(0);
+  const heroReady = splashReveal === undefined ? isInView : splashReveal;
 
-  const goPrev = useCallback(() => {
-    setActiveSlide((i) => Math.max(0, i - 1));
-  }, []);
+  const slides = useMemo<HeroSlide[]>(
+    () => [
+      { kind: "main" },
+      ...HERO_POSTERS.map((p) => ({
+        kind: "poster" as const,
+        posterId: p.id,
+        src: p.src,
+        alt: t(`hero.posters.${p.id}.alt`),
+      })),
+      ...HERO_HIGHLIGHTS.map((h) => ({ kind: "highlight" as const, ...getHeroHighlight(h.id) })),
+    ],
+    [t, getHeroHighlight],
+  );
+  const slideCount = slides.length;
 
-  const goNext = useCallback(() => {
-    setActiveSlide((i) => Math.min(SLIDE_COUNT - 1, i + 1));
-  }, []);
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [autoPaused, setAutoPaused] = useState(false);
+  const autoTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  const go = useCallback(
+    (delta: number) => {
+      setActiveIndex((i) => (i + delta + slideCount) % slideCount);
+    },
+    [slideCount],
+  );
 
   useEffect(() => {
-    const el = stageRef.current;
-    if (!el) return;
+    const el = heroVideoRef.current;
+    if (!el || !heroReady) return;
+    if (activeIndex === 0) {
+      void el.play().catch(() => {});
+    } else {
+      el.pause();
+    }
+  }, [heroReady, activeIndex]);
 
-    const onKeyDown = (e: KeyboardEvent) => {
-      if (!el.contains(document.activeElement)) return;
-      if (e.key === "ArrowLeft") {
-        e.preventDefault();
-        goPrev();
-      } else if (e.key === "ArrowRight") {
-        e.preventDefault();
-        goNext();
+  useEffect(() => {
+    if (reduceMotion || autoPaused) {
+      if (autoTimerRef.current) {
+        clearInterval(autoTimerRef.current);
+        autoTimerRef.current = null;
+      }
+      return;
+    }
+    if (autoTimerRef.current) clearInterval(autoTimerRef.current);
+    autoTimerRef.current = setInterval(() => {
+      setActiveIndex((i) => (i + 1) % slideCount);
+    }, 7500);
+    return () => {
+      if (autoTimerRef.current) {
+        clearInterval(autoTimerRef.current);
+        autoTimerRef.current = null;
       }
     };
+  }, [reduceMotion, autoPaused, slideCount, activeIndex]);
 
-    window.addEventListener("keydown", onKeyDown);
-    return () => window.removeEventListener("keydown", onKeyDown);
-  }, [goPrev, goNext]);
+  const showVideo = activeIndex === 0;
+  const transitionMs = reduceMotion ? 0 : 520;
 
-  const trackTransition =
-    reduceMotion === true
-      ? { duration: 0 }
-      : { type: "spring" as const, stiffness: 300, damping: 34, mass: 0.88 };
-
-  const trackX = `-${(activeSlide * 100) / SLIDE_COUNT}%`;
+  const liveCaption = useMemo(() => {
+    const s = slides[activeIndex];
+    if (!s) return "";
+    if (s.kind === "main") return t("hero.liveMain");
+    if (s.kind === "poster") return s.alt;
+    return `${s.category}. ${s.title}`;
+  }, [slides, activeIndex, t]);
 
   return (
-    <section ref={sectionRef} id="home" className="hero-section">
-      <div className="hero-bg" aria-hidden>
-        <motion.div style={{ y: yHero }} className="hero-bg-inner">
-          <div className="hero-bg-photo" />
-          <div className="hero-bg-bokeh">
-            <span className="hero-bokeh-icon hero-bokeh-icon--1">
-              <Stethoscope strokeWidth={1.25} />
-            </span>
-            <span className="hero-bokeh-icon hero-bokeh-icon--2">
-              <Pill strokeWidth={1.25} />
-            </span>
-            <span className="hero-bokeh-icon hero-bokeh-icon--3">
-              <Users strokeWidth={1.25} />
-            </span>
-            <span className="hero-bokeh-icon hero-bokeh-icon--4">
-              <Plus strokeWidth={1.25} />
-            </span>
+    <section
+      ref={sectionRef}
+      id="home"
+      role="region"
+      aria-roledescription="carousel"
+      aria-label={t("hero.carouselAria")}
+      className="hero-section relative isolate flex min-h-[100dvh] min-h-[100svh] flex-col overflow-hidden text-white [font-family:var(--font-apple)] antialiased"
+      style={{ WebkitFontSmoothing: "antialiased" }}
+      onMouseEnter={() => setAutoPaused(true)}
+      onMouseLeave={() => setAutoPaused(false)}
+    >
+      {/* Single hero video + overlay — only the first slide reveals it (no duplicate video). */}
+      <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden" aria-hidden>
+        <motion.div
+          className="hero-parallax-layer absolute inset-[0_-5%] top-[-8%] h-[116%] w-[110%] max-w-none"
+          style={
+            reduceMotion || !showVideo
+              ? undefined
+              : {
+                  y: yHero,
+                }
+          }
+        >
+          <div className="absolute inset-0 z-0 overflow-hidden">
+            <video
+              ref={heroVideoRef}
+              className="absolute left-1/2 top-1/2 z-0 min-h-[105%] min-w-[105%] -translate-x-1/2 -translate-y-1/2 object-cover blur-[2px] contrast-[1.05] saturate-[1.05] transition-opacity duration-500"
+              style={{ opacity: showVideo ? 0.95 : 0 }}
+              autoPlay
+              muted
+              loop
+              playsInline
+              preload="auto"
+              disablePictureInPicture
+              aria-hidden
+            >
+              <source src={HERO_VIDEO_SRC} type="video/mp4" />
+            </video>
           </div>
-          <div className="hero-bg-scrim" />
-          <div className="hero-orb hero-orb--violet" />
-          <div className="hero-orb hero-orb--cyan" />
-          <div className="hero-orb hero-orb--rose" />
-          <div className="hero-grain hero-grain--subtle" />
+          <div
+            className="absolute inset-0 z-[1] bg-gradient-to-b from-black/55 via-black/45 to-black/60 transition-opacity duration-500"
+            style={{ opacity: showVideo ? 1 : 0 }}
+          />
         </motion.div>
       </div>
 
-      <div className="container-shell hero-content">
-        <div className="hero-layout">
+      <div className="relative z-10 flex min-h-0 flex-1 flex-col overflow-hidden">
+        <div className="relative min-h-0 flex-1 overflow-hidden">
+          <p className="sr-only" aria-live="polite" aria-atomic="true">
+            {t("hero.srLine", {
+              current: String(activeIndex + 1),
+              total: String(slideCount),
+              caption: liveCaption,
+            })}
+          </p>
           <div
-            ref={stageRef}
-            className="hero-stage"
-            tabIndex={0}
-            role="region"
-            aria-roledescription="carousel"
-            aria-label="Hero highlights"
+            className="flex h-full will-change-transform"
+            style={{
+              width: `${slideCount * 100}%`,
+              transform: `translateX(-${(100 / slideCount) * activeIndex}%)`,
+              transition: reduceMotion ? "none" : `transform ${transitionMs}ms cubic-bezier(0.22, 1, 0.36, 1)`,
+            }}
           >
-            <span className="hero-stage__live" aria-live="polite">
-              {LIVE_LABELS[activeSlide] ?? LIVE_LABELS[0]}
-            </span>
-
-            <div className="hero-stage__viewport">
-              <motion.div
-                className="hero-stage__track"
-                animate={{ x: trackX }}
-                transition={trackTransition}
+            {slides.map((slide) => (
+              <div
+                key={slide.kind === "main" ? "main" : slide.kind === "poster" ? slide.posterId : slide.id}
+                className={cn(
+                  "relative min-h-[100dvh] min-h-[100svh] shrink-0 overflow-hidden",
+                  slide.kind === "poster"
+                    ? "p-0"
+                    : "flex flex-col items-center justify-center px-6 pb-20 pt-[calc(5rem+env(safe-area-inset-top,0px))] sm:px-10 sm:pb-24 sm:pt-[calc(5.5rem+env(safe-area-inset-top,0px))]",
+                )}
+                style={{ width: `${100 / slideCount}%` }}
               >
-                <div className="hero-slide">
-                  <motion.div
-                    variants={containerVariants}
-                    initial="hidden"
-                    animate={isInView ? "visible" : "hidden"}
-                    className="hero-text-block hero-copy-glass"
-                  >
-                    <div className="hero-copy-glass__shine" aria-hidden />
-                    <motion.h1 variants={itemVariants} className="hero-headline">
-                      <span className="hero-headline__line hero-headline__line--display">
-                        Exceptional Care
-                      </span>
-                      <span className="hero-headline__line hero-headline__line--sub">for every</span>
-                      <span className="hero-headline__line hero-headline__line--display hero-headline__line--last">
-                        <span className="hero-headline__family">family</span>{" "}
-                        <span className="hero-headline-accent">in Miri</span>
-                      </span>
-                    </motion.h1>
-                  </motion.div>
-                </div>
-
-                <div className="hero-slide">
-                  <div className="hero-updates-surface">
-                    <div className="hero-updates-surface__shine" aria-hidden />
-                    <p className="hero-updates-surface__eyebrow">Updates</p>
-                    <h2 className="hero-updates-surface__title">Offers &amp; notices</h2>
-                    <p className="hero-updates-surface__lede">
-                      What&apos;s new at the practice—promotions, news, and open roles.
-                    </p>
-
-                    <motion.div
-                      className="hero-update-grid"
-                      variants={tileContainerVariants}
-                      initial="hidden"
-                      animate={isInView && activeSlide === 1 ? "visible" : "hidden"}
-                    >
-                      {HERO_UPDATE_TILES.map((tile) => (
-                        <motion.article
-                          key={tile.id}
-                          variants={tileVariants}
-                          className="hero-update-tile"
+                {slide.kind === "poster" ? (
+                  <>
+                    <div className="pointer-events-none absolute inset-0 z-0 bg-neutral-950" aria-hidden />
+                    <img
+                      src={slide.src}
+                      alt={slide.alt}
+                      className="absolute inset-0 z-[1] h-full w-full object-cover object-center"
+                      loading={slide.posterId === "poster-prep" ? "eager" : "lazy"}
+                      decoding="async"
+                      sizes="100vw"
+                    />
+                  </>
+                ) : (
+                  <>
+                    {slide.kind === "highlight" && (
+                      <div
+                        className={`pointer-events-none absolute inset-0 z-0 ${HIGHLIGHT_BG[slide.id]}`}
+                        aria-hidden
+                      />
+                    )}
+                    <div className="relative z-10 mx-auto flex w-full max-w-3xl flex-col items-center text-center">
+                      {slide.kind === "main" ? (
+                        <motion.div
+                          variants={blockReveal}
+                          initial="hidden"
+                          animate={heroReady && activeIndex === 0 ? "visible" : "hidden"}
+                          className="flex flex-col items-center"
                         >
-                          <div className="hero-update-tile__icon" aria-hidden>
-                            {tile.icon}
-                          </div>
-                          <p className="hero-update-tile__category">{tile.category}</p>
-                          <h3 className="hero-update-tile__title">{tile.title}</h3>
-                          <p className="hero-update-tile__desc">{tile.description}</p>
-                        </motion.article>
-                      ))}
-                    </motion.div>
+                          <motion.h1
+                            variants={fadeUp}
+                            className="text-balance text-4xl font-black leading-[1.05] tracking-[-0.04em] sm:text-6xl md:text-7xl lg:text-8xl"
+                          >
+                            <span className="block text-white">{t("hero.mainLine1")}</span>
+                            <span className="mt-1 block text-[#D4C5A0] sm:mt-2">{t("hero.mainLine2")}</span>
+                          </motion.h1>
 
-                    <p className="hero-updates-surface__footnote">
-                      Hours and schedule changes are posted at reception and online.
-                    </p>
-                  </div>
-                </div>
-              </motion.div>
-            </div>
+                          <motion.p
+                            variants={fadeUp}
+                            className="mt-8 max-w-2xl text-pretty text-base font-normal leading-relaxed text-white/90 sm:mt-10 sm:text-lg"
+                          >
+                            {t("hero.intro", { name: CLINIC_INFO.name })}
+                          </motion.p>
+                        </motion.div>
+                      ) : (
+                        <div className="flex flex-col items-center">
+                          <HighlightIconBadge id={slide.id} />
+                          <p className="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-white/70">{slide.category}</p>
+                          <h2 className="text-balance text-3xl font-bold leading-tight tracking-tight text-white sm:text-4xl md:text-5xl">
+                            {slide.title}
+                          </h2>
+                          <p className="mt-6 max-w-2xl text-pretty text-base leading-relaxed text-white/85 sm:text-lg">
+                            {slide.description}
+                          </p>
+                        </div>
+                      )}
+                    </div>
+                  </>
+                )}
+              </div>
+            ))}
+          </div>
 
+          <div className="pointer-events-none absolute inset-y-0 left-0 right-0 z-20 flex items-center justify-between px-2 sm:px-4">
             <button
               type="button"
-              className="hero-nav-btn hero-nav-btn--prev"
-              aria-label="Previous slide"
-              disabled={activeSlide === 0}
-              onClick={goPrev}
+              onClick={() => go(-1)}
+              className="pointer-events-auto inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/25 bg-black/30 text-white shadow-lg backdrop-blur-md transition hover:border-white/45 hover:bg-black/45 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white/80"
+              aria-label={t("hero.prev")}
             >
-              <ChevronLeft className="hero-nav-btn__icon" strokeWidth={2} aria-hidden />
+              <ChevronLeft className="h-6 w-6" aria-hidden />
             </button>
-            <div className="hero-nav-cluster hero-nav-cluster--next">
-              {activeSlide === 0 && (
-                <span className="hero-nav-hint" aria-hidden="true">
-                  Offers &amp; notices
-                </span>
-              )}
-              <button
-                type="button"
-                className="hero-nav-btn hero-nav-btn--next"
-                aria-label={
-                  activeSlide === 0 ? "Next slide: Offers and notices" : "Next slide"
-                }
-                disabled={activeSlide === SLIDE_COUNT - 1}
-                onClick={goNext}
-              >
-                <ChevronRight className="hero-nav-btn__icon" strokeWidth={2} aria-hidden />
-              </button>
-            </div>
-
-            <div className="hero-dots" role="group" aria-label="Choose slide">
-              {Array.from({ length: SLIDE_COUNT }, (_, i) => (
-                <button
-                  key={i}
-                  type="button"
-                  className={`hero-dot ${activeSlide === i ? "hero-dot--active" : ""}`}
-                  aria-label={
-                    i === activeSlide
-                      ? `${LIVE_LABELS[i]}, current`
-                      : `Go to slide ${i + 1}: ${LIVE_LABELS[i]}`
-                  }
-                  onClick={() => setActiveSlide(i)}
-                />
-              ))}
-            </div>
+            <button
+              type="button"
+              onClick={() => go(1)}
+              className="pointer-events-auto inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/25 bg-black/30 text-white shadow-lg backdrop-blur-md transition hover:border-white/45 hover:bg-black/45 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white/80"
+              aria-label={t("hero.next")}
+            >
+              <ChevronRight className="h-6 w-6" aria-hidden />
+            </button>
           </div>
         </div>
       </div>
 
-      <motion.div
-        className="hero-scroll-indicator"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 2, duration: 1 }}
-      >
-        <motion.div
-          animate={{ y: [0, 8, 0] }}
-          transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 z-30 flex justify-center pb-[max(1rem,env(safe-area-inset-bottom))]">
+        <motion.a
+          href="#services"
+          className="pointer-events-auto inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/25 bg-white/10 text-white/80 shadow-lg backdrop-blur-md transition hover:border-white/40 hover:bg-white/15 hover:text-white"
+          aria-label={t("hero.scrollServices")}
+          initial={{ opacity: 0, y: 8 }}
+          animate={heroReady ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
+          transition={{ delay: 0.9, duration: 0.55, ease: easeIn }}
         >
-          <ChevronDown className="h-5 w-5 text-slate-400" />
-        </motion.div>
-      </motion.div>
+          <motion.span
+            animate={reduceMotion ? undefined : { y: [0, 5, 0] }}
+            transition={reduceMotion ? undefined : { duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
+            className="flex"
+          >
+            <ChevronDown className="h-5 w-5" aria-hidden />
+          </motion.span>
+        </motion.a>
+      </div>
     </section>
   );
 }

@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
-import { HeartPulse, Home, IdCard, MapPin, Send, Stethoscope, Star } from "lucide-react";
+import { HeartPulse, Home, IdCard, MapPin, Stethoscope, Star } from "lucide-react";
+import { useI18n } from "../../contexts/I18nContext";
 import MacOSDock from "../ui/MacOSDock";
 import { CLINIC_INFO } from "../../config/clinicData";
 import { getWhatsAppLink } from "../../utils/contact";
@@ -8,12 +9,26 @@ import type { DockAppItem } from "../../types/dock";
 
 const SECTIONS = ["home", "services", "panels", "profile", "reviews", "contact"];
 
+/** Fills the dock’s native-icon frame (`MacOSDock` sizes the wrapper). */
+function WhatsAppDockIcon() {
+  return (
+    <img
+      src="/logo/whts.png"
+      alt=""
+      className="h-full w-full object-contain"
+      aria-hidden
+      draggable={false}
+    />
+  );
+}
+
 function scrollTo(id: string) {
   const el = document.getElementById(id);
   if (el) window.scrollTo({ top: el.offsetTop - 24, behavior: "smooth" });
 }
 
 export default function AppleDock() {
+  const { t } = useI18n();
   const [activeSection, setActiveSection] = useState("home");
 
   useEffect(() => {
@@ -37,21 +52,21 @@ export default function AppleDock() {
 
   const apps = useMemo<DockAppItem[]>(
     () => [
-      { id: "home", name: "Home", icon: <Home /> },
-      { id: "services", name: "Services", icon: <HeartPulse /> },
-      { id: "panels", name: "Panels", icon: <IdCard /> },
-      { id: "profile", name: "Doctor", icon: <Stethoscope /> },
-      { id: "reviews", name: "Reviews", icon: <Star /> },
-      { id: "contact", name: "Contact", icon: <MapPin /> },
+      { id: "home", name: t("nav.dockHome"), icon: <Home /> },
+      { id: "services", name: t("nav.dockServices"), icon: <HeartPulse /> },
+      { id: "panels", name: t("nav.dockPanels"), icon: <IdCard /> },
+      { id: "profile", name: t("nav.dockDoctor"), icon: <Stethoscope /> },
+      { id: "reviews", name: t("nav.dockReviews"), icon: <Star /> },
+      { id: "contact", name: t("nav.dockContact"), icon: <MapPin /> },
       {
         id: "dock-divider",
         name: "",
         icon: <div className="h-8 w-px bg-slate-500/35" aria-hidden />,
         isDivider: true,
       },
-      { id: "whatsapp", name: "WhatsApp", icon: <Send /> },
+      { id: "whatsapp", name: t("nav.dockWhatsapp"), icon: <WhatsAppDockIcon />, nativeIcon: true, nativeIconPlain: true },
     ],
-    []
+    [t],
   );
 
   const onAppClick = (appId: string) => {
