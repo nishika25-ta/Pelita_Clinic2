@@ -31,19 +31,19 @@ export default function MacOSDock({ apps, onAppClick, openApps = [], className =
     }
     const w = window.innerWidth;
     if (w < 360) {
-      return { baseIconSize: 22, maxScale: 1.18, effectWidth: 100, baseSpacing: 3, padX: 8, padY: 6 };
+      return { baseIconSize: 30, maxScale: 1.26, effectWidth: 118, baseSpacing: 4, padX: 10, padY: 8 };
     }
     if (w < 400) {
-      return { baseIconSize: 24, maxScale: 1.22, effectWidth: 110, baseSpacing: 4, padX: 8, padY: 7 };
+      return { baseIconSize: 32, maxScale: 1.3, effectWidth: 128, baseSpacing: 5, padX: 10, padY: 8 };
     }
     if (w < 480) {
-      return { baseIconSize: 26, maxScale: 1.28, effectWidth: 125, baseSpacing: 5, padX: 10, padY: 8 };
+      return { baseIconSize: 34, maxScale: 1.34, effectWidth: 142, baseSpacing: 6, padX: 12, padY: 9 };
     }
     if (w < 640) {
-      return { baseIconSize: 30, maxScale: 1.38, effectWidth: 150, baseSpacing: 7, padX: 12, padY: 9 };
+      return { baseIconSize: 38, maxScale: 1.44, effectWidth: 168, baseSpacing: 8, padX: 14, padY: 10 };
     }
     if (w < 768) {
-      return { baseIconSize: 36, maxScale: 1.5, effectWidth: 180, baseSpacing: 9, padX: 14, padY: 10 };
+      return { baseIconSize: 46, maxScale: 1.56, effectWidth: 200, baseSpacing: 10, padX: 16, padY: 12 };
     }
     return { baseIconSize: 42, maxScale: 1.65, effectWidth: 220, baseSpacing: 10, padX: 16, padY: 10 };
   }, []);

@@ -17,6 +17,7 @@ import type { ServiceItem } from "../../types/clinic";
 import { SERVICES } from "../../config/clinicData";
 import { SpotlightCard } from "../ui/SpotlightCard";
 import { useParallax } from "../../utils/useParallax";
+import ScrollStack, { ScrollStackItem } from "../ui/ScrollStack";
 
 const iconClass = "h-6 w-6 text-indigo-500";
 
@@ -49,8 +50,40 @@ function ServiceCategoryIcon({ service }: { service: ServiceItem }) {
   }
 }
 
-export default function ServicesSection() {
+function ServiceCategoryInner({ service }: { service: ServiceItem }) {
   const { t, localizeService } = useI18n();
+  const { title, items } = localizeService(service);
+
+  return (
+    <div className="p-8">
+      <div className="mb-6 flex items-start justify-between">
+        <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-indigo-50">
+          <ServiceCategoryIcon service={service} />
+        </div>
+        <span className="inline-flex items-center justify-center rounded-full border border-purple-100 bg-purple-50 px-3 py-1 text-xs font-bold text-purple-600">
+          {t("services.itemsBadge", { n: items.length })}
+        </span>
+      </div>
+      <h3 className="mb-6 text-xl font-bold text-slate-900">{title}</h3>
+      <ul className="space-y-4">
+        {items.map((item) => (
+          <li key={item} className="group flex items-start gap-3">
+            <CheckCircle2
+              className="mt-0.5 h-5 w-5 shrink-0 text-indigo-200 transition-colors group-hover:text-indigo-500"
+              aria-hidden
+            />
+            <span className="text-sm leading-relaxed text-slate-600 transition-colors group-hover:text-slate-900">
+              {item}
+            </span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+export default function ServicesSection() {
+  const { t } = useI18n();
   const totalServices = SERVICES.reduce((sum, service) => sum + service.items.length, 0);
   const bgParallax = useParallax({ distance: 56 });
 
@@ -90,35 +123,32 @@ export default function ServicesSection() {
           </div>
         </div>
 
-        <div className="mx-auto max-w-7xl columns-1 [column-gap:2rem] md:columns-2 xl:columns-3">
-          {SERVICES.map((service) => {
-            const { title, items } = localizeService(service);
-            return (
-              <SpotlightCard key={service.category} className="mb-8 break-inside-avoid">
-                <div className="p-8">
-                  <div className="mb-6 flex items-start justify-between">
-                    <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-indigo-50">
-                      <ServiceCategoryIcon service={service} />
-                    </div>
-                    <span className="inline-flex items-center justify-center rounded-full border border-purple-100 bg-purple-50 px-3 py-1 text-xs font-bold text-purple-600">
-                      {t("services.itemsBadge", { n: items.length })}
-                    </span>
-                  </div>
-                  <h3 className="mb-6 text-xl font-bold text-slate-900">{title}</h3>
-                  <ul className="space-y-4">
-                    {items.map((item) => (
-                      <li key={item} className="group flex items-start gap-3">
-                        <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-indigo-200 transition-colors group-hover:text-indigo-500" aria-hidden />
-                        <span className="text-sm leading-relaxed text-slate-600 transition-colors group-hover:text-slate-900">
-                          {item}
-                        </span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </SpotlightCard>
-            );
-          })}
+        <div className="relative mx-auto hidden max-w-7xl md:block columns-1 [column-gap:2rem] md:columns-2 xl:columns-3">
+          {SERVICES.map((service) => (
+            <SpotlightCard key={service.category} className="mb-8 break-inside-avoid">
+              <ServiceCategoryInner service={service} />
+            </SpotlightCard>
+          ))}
+        </div>
+
+        <div className="relative mx-auto h-[min(78dvh,640px)] w-full max-w-lg md:hidden">
+          <ScrollStack
+            className="h-full"
+            itemDistance={56}
+            itemStackDistance={22}
+            itemScale={0.024}
+            baseScale={0.9}
+            stackPosition="14%"
+            scaleEndPosition="10%"
+          >
+            {SERVICES.map((service) => (
+              <ScrollStackItem key={service.category} itemClassName="scroll-stack-card--service">
+                <SpotlightCard className="mb-0 h-full min-h-0 shadow-md">
+                  <ServiceCategoryInner service={service} />
+                </SpotlightCard>
+              </ScrollStackItem>
+            ))}
+          </ScrollStack>
         </div>
       </div>
     </section>

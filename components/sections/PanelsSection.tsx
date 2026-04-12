@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { useI18n } from "../../contexts/I18nContext";
 import { PANELS } from "../../config/clinicData";
 import { useParallax } from "../../utils/useParallax";
+import ScrollStack, { ScrollStackItem } from "../ui/ScrollStack";
 
 const PANEL_ICON_MAP: Record<string, string> = {
   AIA: "/panel_icon/AIA.png",
@@ -19,6 +20,35 @@ const PANEL_ICON_MAP: Record<string, string> = {
   "Grand Palace Hotel Miri": "/panel_icon/grandpalace.png",
   SAFHIS: "/panel_icon/SFH.jpeg",
 };
+
+function PanelCard({ panel }: { panel: string }) {
+  return (
+    <article className="group flex h-full flex-col overflow-hidden rounded-2xl border-2 border-violet-300/70 bg-gradient-to-b from-white via-violet-50/40 to-violet-100/50 shadow-[0_10px_28px_-8px_rgba(15,23,42,0.12),0_2px_0_0_rgba(255,255,255,0.85)_inset] ring-1 ring-slate-300/35 transition duration-300 hover:-translate-y-0.5 hover:border-violet-400 hover:shadow-[0_16px_36px_-10px_rgba(91,33,182,0.22)] focus-within:border-violet-500 focus-within:ring-2 focus-within:ring-violet-400 focus-within:ring-offset-2 focus-within:ring-offset-violet-50/80">
+      <div className="relative aspect-[16/10] w-full overflow-hidden border-b-2 border-violet-200/80 bg-slate-100">
+        <div
+          className="absolute inset-0 bg-[radial-gradient(circle_at_50%_30%,rgba(139,92,246,0.12),transparent_55%)]"
+          aria-hidden
+        />
+        {PANEL_ICON_MAP[panel] ? (
+          <img
+            src={PANEL_ICON_MAP[panel]}
+            alt={`${panel} logo`}
+            className="relative z-[1] box-border h-full w-full object-contain object-center p-3 transition duration-300 group-hover:scale-[1.02] sm:p-4"
+            loading="lazy"
+            decoding="async"
+          />
+        ) : (
+          <div className="relative z-[1] flex h-full w-full items-center justify-center px-3">
+            <span className="text-center text-xs font-semibold uppercase tracking-wider text-violet-600">{panel}</span>
+          </div>
+        )}
+      </div>
+      <div className="flex flex-1 flex-col justify-end border-t border-violet-200/70 bg-violet-50/90 px-4 py-3.5">
+        <p className="text-sm font-semibold leading-snug text-slate-900">{panel}</p>
+      </div>
+    </article>
+  );
+}
 
 export default function PanelsSection() {
   const { t } = useI18n();
@@ -44,38 +74,34 @@ export default function PanelsSection() {
             <p className="text-sm leading-relaxed text-slate-600">{t("panels.body")}</p>
           </div>
 
-          <ul className="grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3 lg:gap-6 xl:grid-cols-4" role="list">
+          <ul
+            className="mb-0 hidden gap-5 md:grid md:grid-cols-2 md:gap-5 lg:grid-cols-3 lg:gap-6 xl:grid-cols-4"
+            role="list"
+          >
             {PANELS.map((panel) => (
               <li key={panel} className="list-none">
-                <article className="group flex h-full flex-col overflow-hidden rounded-2xl border-2 border-violet-300/70 bg-gradient-to-b from-white via-violet-50/40 to-violet-100/50 shadow-[0_10px_28px_-8px_rgba(15,23,42,0.12),0_2px_0_0_rgba(255,255,255,0.85)_inset] ring-1 ring-slate-300/35 transition duration-300 hover:-translate-y-0.5 hover:border-violet-400 hover:shadow-[0_16px_36px_-10px_rgba(91,33,182,0.22)] focus-within:border-violet-500 focus-within:ring-2 focus-within:ring-violet-400 focus-within:ring-offset-2 focus-within:ring-offset-violet-50/80">
-                  <div className="relative aspect-[16/10] w-full overflow-hidden border-b-2 border-violet-200/80 bg-slate-100">
-                    <div
-                      className="absolute inset-0 bg-[radial-gradient(circle_at_50%_30%,rgba(139,92,246,0.12),transparent_55%)]"
-                      aria-hidden
-                    />
-                    {PANEL_ICON_MAP[panel] ? (
-                      <img
-                        src={PANEL_ICON_MAP[panel]}
-                        alt={`${panel} logo`}
-                        className="relative z-[1] box-border h-full w-full object-contain object-center p-3 transition duration-300 group-hover:scale-[1.02] sm:p-4"
-                        loading="lazy"
-                        decoding="async"
-                      />
-                    ) : (
-                      <div className="relative z-[1] flex h-full w-full items-center justify-center px-3">
-                        <span className="text-center text-xs font-semibold uppercase tracking-wider text-violet-600">
-                          {panel}
-                        </span>
-                      </div>
-                    )}
-                  </div>
-                  <div className="flex flex-1 flex-col justify-end border-t border-violet-200/70 bg-violet-50/90 px-4 py-3.5">
-                    <p className="text-sm font-semibold leading-snug text-slate-900">{panel}</p>
-                  </div>
-                </article>
+                <PanelCard panel={panel} />
               </li>
             ))}
           </ul>
+
+          <div className="relative mx-auto mt-2 h-[min(72dvh,560px)] w-full max-w-lg md:hidden">
+            <ScrollStack
+              className="h-full"
+              itemDistance={64}
+              itemStackDistance={24}
+              itemScale={0.026}
+              baseScale={0.88}
+              stackPosition="16%"
+              scaleEndPosition="11%"
+            >
+              {PANELS.map((panel) => (
+                <ScrollStackItem key={panel} itemClassName="scroll-stack-card--panel">
+                  <PanelCard panel={panel} />
+                </ScrollStackItem>
+              ))}
+            </ScrollStack>
+          </div>
         </div>
       </div>
     </section>

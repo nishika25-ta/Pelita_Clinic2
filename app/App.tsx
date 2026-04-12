@@ -40,7 +40,7 @@ export default function App() {
         <div className="min-h-screen overflow-x-clip overflow-y-visible font-sans text-slate-800 selection:bg-purple-200 selection:text-purple-900">
           <main>
             <HeroSection yHero={yHero} splashReveal={splashHandoff} />
-            <ScrollReveal>
+            <ScrollReveal viewport={{ once: true, amount: 0.03, margin: "0px 0px 24% 0px" }}>
               <ServicesSection />
             </ScrollReveal>
             <ScrollReveal>

@@ -10,18 +10,27 @@ export type ScrollRevealProps = {
   offsetY?: number;
   /** Animation duration (seconds) */
   duration?: number;
+  /** Override Framer `whileInView` viewport (helps mobile / Lenis intersection timing). */
+  viewport?: NonNullable<HTMLMotionProps<"div">["viewport"]>;
 } & Omit<HTMLMotionProps<"div">, "initial" | "whileInView" | "viewport" | "transition">;
 
 /**
  * Fades and slides content into view when the user scrolls it into the viewport.
  * Uses Framer Motion — pair with Lenis smooth scroll without extra setup.
  */
+const defaultViewport: NonNullable<HTMLMotionProps<"div">["viewport"]> = {
+  once: true,
+  amount: 0.08,
+  margin: "0px 0px 12% 0px",
+};
+
 export default function ScrollReveal({
   children,
   className,
   delay = 0,
   offsetY = 32,
   duration = 0.75,
+  viewport,
   ...rest
 }: ScrollRevealProps) {
   return (
@@ -29,7 +38,7 @@ export default function ScrollReveal({
       className={className}
       initial={{ opacity: 0, y: offsetY }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.12, margin: "0px 0px -10% 0px" }}
+      viewport={viewport ?? defaultViewport}
       transition={{
         duration,
         delay,
