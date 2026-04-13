@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import type { DockAppItem } from "../../types/dock";
+import { getDockResponsiveConfig } from "../../utils/dockMetrics";
 import "./MacOSDock.css";
 
 type MacOSDockProps = {
@@ -19,33 +20,8 @@ export default function MacOSDock({ apps, onAppClick, openApps = [], className =
   const lastMouseMoveTime = useRef(0);
 
   const getResponsiveConfig = useCallback(() => {
-    if (typeof window === "undefined") {
-      return {
-        baseIconSize: 40,
-        maxScale: 1.42,
-        effectWidth: 200,
-        baseSpacing: 10,
-        padX: 16,
-        padY: 10,
-      };
-    }
-    const w = window.innerWidth;
-    if (w < 360) {
-      return { baseIconSize: 30, maxScale: 1.26, effectWidth: 118, baseSpacing: 4, padX: 10, padY: 8 };
-    }
-    if (w < 400) {
-      return { baseIconSize: 32, maxScale: 1.3, effectWidth: 128, baseSpacing: 5, padX: 10, padY: 8 };
-    }
-    if (w < 480) {
-      return { baseIconSize: 34, maxScale: 1.34, effectWidth: 142, baseSpacing: 6, padX: 12, padY: 9 };
-    }
-    if (w < 640) {
-      return { baseIconSize: 38, maxScale: 1.44, effectWidth: 168, baseSpacing: 8, padX: 14, padY: 10 };
-    }
-    if (w < 768) {
-      return { baseIconSize: 46, maxScale: 1.38, effectWidth: 188, baseSpacing: 10, padX: 16, padY: 12 };
-    }
-    return { baseIconSize: 42, maxScale: 1.42, effectWidth: 200, baseSpacing: 10, padX: 16, padY: 10 };
+    const w = typeof window === "undefined" ? 1200 : window.innerWidth;
+    return getDockResponsiveConfig(w);
   }, []);
 
   const [config, setConfig] = useState(getResponsiveConfig);

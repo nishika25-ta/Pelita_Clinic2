@@ -37,6 +37,10 @@ const HERO_VIDEO_SRC = "/hero.mp4";
 const HERO_CAROUSEL_MS = 840;
 const HERO_CAROUSEL_EASE = "cubic-bezier(0.33, 1, 0.68, 1)";
 
+/** Autoplay: longer on the opening main slide, standard cadence on posters and highlights. */
+const HERO_AUTOPLAY_MAIN_MS = 10_000;
+const HERO_AUTOPLAY_OTHER_MS = 5000;
+
 const HIGHLIGHT_ICONS: Record<HeroHighlightId, typeof Megaphone> = {
   promotions: Megaphone,
   news: Newspaper,
@@ -95,7 +99,7 @@ export default function HeroSection({ yHero, splashReveal }: HeroSectionProps) {
   const [isDesktop, setIsDesktop] = useState(
     () => typeof window !== "undefined" && window.matchMedia("(min-width: 768px)").matches,
   );
-  const autoTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const autoAdvanceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const viewportRef = useRef<HTMLDivElement>(null);
   const activeIndexRef = useRef(0);
   const dragPointerIdRef = useRef<number | null>(null);
@@ -139,27 +143,32 @@ export default function HeroSection({ yHero, splashReveal }: HeroSectionProps) {
     }
   }, [heroReady, activeIndex]);
 
-  /** Advance every 5s once the hero is interactable (after splash when `splashReveal` is used).
-   *  Pauses while the user is dragging on desktop. */
+  /** Autoplay: 10s on the main slide, 5s on posters and highlights. Reschedules when the slide changes.
+   *  Pauses while the user is dragging on desktop. Same behavior on mobile and desktop. */
   useEffect(() => {
     if (!heroReady || isDragging) {
-      if (autoTimerRef.current) {
-        clearInterval(autoTimerRef.current);
-        autoTimerRef.current = null;
+      if (autoAdvanceTimerRef.current !== null) {
+        clearTimeout(autoAdvanceTimerRef.current);
+        autoAdvanceTimerRef.current = null;
       }
       return;
     }
-    if (autoTimerRef.current) clearInterval(autoTimerRef.current);
-    autoTimerRef.current = window.setInterval(() => {
+    if (autoAdvanceTimerRef.current !== null) {
+      clearTimeout(autoAdvanceTimerRef.current);
+      autoAdvanceTimerRef.current = null;
+    }
+    const holdMs = activeIndex === 0 ? HERO_AUTOPLAY_MAIN_MS : HERO_AUTOPLAY_OTHER_MS;
+    autoAdvanceTimerRef.current = window.setTimeout(() => {
+      autoAdvanceTimerRef.current = null;
       setActiveIndex((i) => (i + 1) % slideCountRef.current);
-    }, 5000);
+    }, holdMs);
     return () => {
-      if (autoTimerRef.current) {
-        clearInterval(autoTimerRef.current);
-        autoTimerRef.current = null;
+      if (autoAdvanceTimerRef.current !== null) {
+        clearTimeout(autoAdvanceTimerRef.current);
+        autoAdvanceTimerRef.current = null;
       }
     };
-  }, [heroReady, isDragging]);
+  }, [heroReady, isDragging, activeIndex]);
 
   const clampedDragForClientX = useCallback(
     (clientX: number) => {
