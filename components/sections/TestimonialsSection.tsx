@@ -53,7 +53,6 @@ export default function TestimonialsSection({ yTestimonial }: TestimonialsSectio
       />
       <div className="container-shell relative z-10">
         <div className="mx-auto mb-10 max-w-3xl text-center">
-          <p className="section-subtitle mb-2">{t("testimonials.section")}</p>
           <h2 className="section-title mb-4">{t("testimonials.title")}</h2>
           <p className="text-slate-600">{t("testimonials.subtitle")}</p>
           <div className="mx-auto mt-6 flex w-full max-w-2xl flex-col items-stretch gap-5 overflow-hidden rounded-3xl border border-violet-200/40 bg-gradient-to-br from-white/95 via-violet-50/35 to-fuchsia-50/20 p-5 shadow-[0_24px_60px_-24px_rgba(91,33,182,0.28)] ring-1 ring-white/70 md:backdrop-blur-md sm:flex-row sm:items-center sm:justify-between sm:gap-6 sm:p-6">

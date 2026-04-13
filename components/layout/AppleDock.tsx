@@ -3,24 +3,9 @@ import { motion } from "framer-motion";
 import { HeartPulse, Home, IdCard, MapPin, Stethoscope, Star } from "lucide-react";
 import { useI18n } from "../../contexts/I18nContext";
 import MacOSDock from "../ui/MacOSDock";
-import { CLINIC_INFO } from "../../config/clinicData";
-import { getWhatsAppLink } from "../../utils/contact";
 import type { DockAppItem } from "../../types/dock";
 
 const SECTIONS = ["home", "services", "panels", "profile", "reviews", "contact"];
-
-/** Fills the dock’s native-icon frame (`MacOSDock` sizes the wrapper). */
-function WhatsAppDockIcon() {
-  return (
-    <img
-      src="/logo/whts.png"
-      alt=""
-      className="h-full w-full object-contain"
-      aria-hidden
-      draggable={false}
-    />
-  );
-}
 
 function scrollTo(id: string) {
   const el = document.getElementById(id);
@@ -58,23 +43,11 @@ export default function AppleDock() {
       { id: "profile", name: t("nav.dockDoctor"), icon: <Stethoscope /> },
       { id: "reviews", name: t("nav.dockReviews"), icon: <Star /> },
       { id: "contact", name: t("nav.dockContact"), icon: <MapPin /> },
-      {
-        id: "dock-divider",
-        name: "",
-        icon: <div className="h-8 w-px bg-slate-500/35" aria-hidden />,
-        isDivider: true,
-      },
-      { id: "whatsapp", name: t("nav.dockWhatsapp"), icon: <WhatsAppDockIcon />, nativeIcon: true, nativeIconPlain: true },
     ],
     [t],
   );
 
   const onAppClick = (appId: string) => {
-    if (appId === "dock-divider") return;
-    if (appId === "whatsapp") {
-      window.open(getWhatsAppLink(CLINIC_INFO.phone), "_blank", "noopener,noreferrer");
-      return;
-    }
     scrollTo(appId);
   };
 

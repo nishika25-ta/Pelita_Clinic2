@@ -38,24 +38,31 @@ export const HERO_HIGHLIGHTS: readonly HeroHighlight[] = [
 /** Hero carousel poster images — files live in `public/` (e.g. `public/poster1.jpeg` → `/poster1.jpeg`). */
 export interface HeroPosterSlide {
   id: string;
+  /** Landscape / desktop (default `<img src>` and `<picture>` fallback). */
   src: string;
+  /** Portrait / narrow viewports — used with `<source media="(max-width: 767px)">` when set. */
+  srcMobile?: string;
+  /** Fallback description; carousel uses `hero.posters.<id>.alt` from i18n when available. */
   alt: string;
 }
 
 export const HERO_POSTERS: readonly HeroPosterSlide[] = [
   {
-    id: "poster-prep",
-    src: "/poster1.jpeg",
-    alt: "Pelita Clinic poster: HIV PrEP availability, pricing, and included services.",
+    id: "poster-senior",
+    src: "/Senior_L.jpeg",
+    srcMobile: "/Senior_P.jpeg",
+    alt: "",
   },
   {
-    id: "poster-labour-day",
-    src: "/poster2.jpeg",
-    alt: "Pelita Clinic poster: Labour Day closure and reopening dates.",
+    id: "poster-vaccine",
+    src: "/Vaccine_L.jpeg",
+    srcMobile: "/Vaccine_P.jpeg",
+    alt: "",
   },
   {
-    id: "poster-health-screening",
-    src: "/poster3.jpeg",
-    alt: "Pelita Clinic poster: health screening packages and add-on offers.",
+    id: "poster-berikel",
+    src: "/Berikel_L.jpeg",
+    srcMobile: "/Berikel_P.jpeg",
+    alt: "",
   },
 ] as const;

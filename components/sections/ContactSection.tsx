@@ -13,7 +13,6 @@ export default function ContactSection() {
     <section id="contact" className="section-shell">
       <div className="container-shell">
         <div className="mb-10 text-center">
-          <p className="section-subtitle mb-2">{t("contact.section")}</p>
           <h2 className="section-title mb-3">{t("contact.title")}</h2>
           <p className="mx-auto max-w-2xl text-slate-600">
             {CLINIC_INFO.appointmentPolicy} {t("contact.leadSuffix")}

@@ -14,13 +14,28 @@
   transform-origin: center center;
 }
 
-/* Poster slides: readable typography, letterboxed on ultrawide. */
+/* Poster slides: letterboxed on narrow screens; full-bleed cover from md (see HeroSection layout). */
 .hero-poster-img {
   width: 100%;
   height: auto;
-  max-height: min(78dvh, 880px);
-  object-fit: contain;
   object-position: center top;
+}
+
+@media (max-width: 767px) {
+  .hero-poster-img {
+    max-height: min(78dvh, 880px);
+    object-fit: contain;
+  }
+}
+
+@media (min-width: 768px) {
+  .hero-poster-img {
+    height: 100%;
+    max-height: none;
+    min-height: 100%;
+    object-fit: cover;
+    object-position: center center;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

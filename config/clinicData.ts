@@ -7,7 +7,7 @@ export const CLINIC_INFO: ClinicInfo = {
   address: "Ground Floor, Lot 600, Block 7, Pelita Commercial Centre, 98000 Miri, Sarawak, Malaysia",
   area: "Downtown Miri - Pelita Commercial Centre",
   mapsLink: "https://maps.app.goo.gl/WmNHbG3qf2wj36Es9",
-  hours: ["Mon - Thurs: 8:00am - 12:00pm, 1:30pm - 4:00pm, 6:00pm - 8:00pm", "Fri - Sat: 8:00am - 12:00pm, 1:30pm - 4:00pm"],
+  hours: ["Mon - Thurs: 8:00am - 12:00pm, 1:30pm - 4:00pm, 6:30pm - 8:00pm", "Fri - Sat: 8:00am - 12:00pm, 1:30pm - 4:00pm"],
   days: "Mon - Sat",
   holidays: "Sunday/Selected Public Holiday : Closed",
   phone: "011-6745 0600",
@@ -53,7 +53,7 @@ export const DOCTOR_PROFILE: DoctorProfile = {
   ],
   experience: "12+ years",
   languages: "English, Bahasa Melayu, Mandarin",
-  introVideoSrc: "/doctor.mp4",
+  doctorPhotoSrc: "/dr_image.jpg",
 };
 
 export const SERVICES: ServiceItem[] = [
@@ -62,11 +62,11 @@ export const SERVICES: ServiceItem[] = [
     iconName: "stethoscope",
     items: ["GP Consultation", "Fever, Flu, Sore Throat, Cough", "Diarrhea, Vomiting", "Ear, Nose & Eye Treatment", "Infectious Diseases", "Urinary Tract Infection","Gastric", "Musculoskeletal pain", "Chest Pain"],
   },
-  { category: "Screening & Health Checks", iconName: "activity", items: ["Pre-Employment Check Up", "Health Screening", "Sexually Transmitted Disease Screening", "Medical Check Up", "Vokasiaonal Driving License", "Food Handler Medical Screening"] },
+  { category: "Screening & Health Checks", iconName: "activity", items: ["Pre-Employment Check Up", "Health Screening", "Sexually Transmitted Disease Screening", "Medical Check Up", "Vocational Driving License", "Food Handler Medical Screening"] },
   {
     category: "Other Services",
     iconName: "bug",
-    items: ["Complete Blood Count (CBC/FBC)", "Blood Glucose Test","Electrocardiogram (ECG)", "Urine Testing", "Urea Breath Test", "Ultrasound Scan", "4 in 1 Swab (Covid-19,Influenze A+B,RSV)" ,"Dengue Combo Test", "HIV Rapid Test", "Modified Oral Glucose Tolerance Test (MOGTT)", "Nebulizer", "Referral"],
+    items: ["Complete Blood Count (CBC/FBC)", "Blood Glucose Test","Electrocardiogram (ECG)", "Urine Testing", "Urea Breath Test", "Ultrasound Scan", "4 in 1 Swab (Covid-19,Influenza A+B,RSV)" ,"Dengue Combo Test", "HIV Rapid Test", "Modified Oral Glucose Tolerance Test (MOGTT)", "Nebulizer", "Referral"],
   },
   { category: "Vaccinations/Immunisations", iconName: "syringe", items: ["Hepatitis B Vaccine", "Hepatitis A Vaccine", "Influenza Vaccine", "Typhoid Vaccine", "Hepatitis A & B", "Human Papillomavirus (HPV)", "Shingles", "Dengue", "Tetanus"] },
   {
@@ -94,7 +94,9 @@ export const SERVICES: ServiceItem[] = [
     iconName: "scissors",
     items: [
       "Toilet & Suturing",
-      "Ear/Eye Irrigation/Wound Dressing/NG Tube Insertion",
+      "Ear/Eye Irrigation",
+      "Wound Dressing",
+      "NG Tube Insertion",
       "Catheterisation",
     ],
   },

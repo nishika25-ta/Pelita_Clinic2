@@ -22,8 +22,8 @@ export interface DoctorProfile {
   qualifications: string[];
   experience: string;
   languages: string;
-  /** Served from `public/` (e.g. `/doctor.mp4`). */
-  introVideoSrc: string;
+  /** Public URL, e.g. `/dr_image.jpg` from `public/`. */
+  doctorPhotoSrc: string;
 }
 
 export interface ServiceItem {

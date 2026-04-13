@@ -22,7 +22,7 @@ export default function MacOSDock({ apps, onAppClick, openApps = [], className =
     if (typeof window === "undefined") {
       return {
         baseIconSize: 40,
-        maxScale: 1.6,
+        maxScale: 1.42,
         effectWidth: 200,
         baseSpacing: 10,
         padX: 16,
@@ -43,9 +43,9 @@ export default function MacOSDock({ apps, onAppClick, openApps = [], className =
       return { baseIconSize: 38, maxScale: 1.44, effectWidth: 168, baseSpacing: 8, padX: 14, padY: 10 };
     }
     if (w < 768) {
-      return { baseIconSize: 46, maxScale: 1.56, effectWidth: 200, baseSpacing: 10, padX: 16, padY: 12 };
+      return { baseIconSize: 46, maxScale: 1.38, effectWidth: 188, baseSpacing: 10, padX: 16, padY: 12 };
     }
-    return { baseIconSize: 42, maxScale: 1.65, effectWidth: 220, baseSpacing: 10, padX: 16, padY: 10 };
+    return { baseIconSize: 42, maxScale: 1.42, effectWidth: 200, baseSpacing: 10, padX: 16, padY: 10 };
   }, []);
 
   const [config, setConfig] = useState(getResponsiveConfig);
@@ -153,7 +153,7 @@ export default function MacOSDock({ apps, onAppClick, openApps = [], className =
     <div className={`fixed bottom-4 left-1/2 z-50 max-w-[calc(100vw-12px)] -translate-x-1/2 sm:bottom-6 ${className}`}>
       <div
         ref={dockRef}
-        className="macos-dock-bar flex items-center justify-center transition-all duration-300 ease-out"
+        className="macos-dock-bar flex items-center justify-center transition-[box-shadow,transform] duration-300 ease-out"
         style={{
           width: `${dockWidth}px`,
           padding: `${padY}px ${padX}px`,
@@ -179,15 +179,19 @@ export default function MacOSDock({ apps, onAppClick, openApps = [], className =
             const isActive = openApps.includes(app.id) && !app.isDivider;
 
             const label = app.name ? (
-              <div className="macos-dock-tooltip pointer-events-none absolute -top-12 z-10 -translate-y-1 whitespace-nowrap rounded-lg px-2.5 py-1 text-[9px] font-bold uppercase tracking-widest opacity-0 transition-all transform group-hover:translate-y-0 group-hover:opacity-100">
+              <div className="macos-dock-tooltip pointer-events-none absolute -top-11 z-10 translate-y-1 whitespace-nowrap rounded-lg px-2.5 py-1.5 text-[10px] font-semibold tracking-wide opacity-0 shadow-sm transition-all duration-200 ease-out group-hover:translate-y-0 group-hover:opacity-100">
                 {app.name}
               </div>
             ) : null;
 
             const iconInner = (
               <div
-                className={`macos-dock-icon-wrap flex h-full w-full items-center justify-center transition-colors ${
-                  app.isDivider ? "macos-dock-icon-wrap--divider opacity-60" : isActive ? "macos-dock-icon-wrap--active" : ""
+                className={`macos-dock-icon-wrap flex h-full w-full items-center justify-center rounded-[14px] transition-[color,transform] duration-200 ease-out ${
+                  app.isDivider
+                    ? "macos-dock-icon-wrap--divider opacity-60"
+                    : isActive
+                      ? "macos-dock-icon-wrap--active text-slate-900"
+                      : "text-slate-500 group-hover:text-slate-800"
                 }`}
               >
                 {app.isDivider ? (
@@ -220,9 +224,9 @@ export default function MacOSDock({ apps, onAppClick, openApps = [], className =
                 <div
                   className="macos-dock-active-dot absolute rounded-full"
                   style={{
-                    bottom: `-${Math.max(3, scaledSize * 0.1)}px`,
-                    width: "3px",
-                    height: "3px",
+                    bottom: `${Math.max(5, scaledSize * 0.12)}px`,
+                    width: "4px",
+                    height: "4px",
                   }}
                 />
               ) : null;
@@ -251,7 +255,7 @@ export default function MacOSDock({ apps, onAppClick, openApps = [], className =
                 ref={(el) => {
                   iconRefs.current[index] = el;
                 }}
-                className="group absolute flex cursor-pointer flex-col items-center justify-center border-0 bg-transparent p-0"
+                className="group absolute flex cursor-pointer flex-col items-center justify-center border-0 bg-transparent p-0 transition-transform duration-200 ease-out hover:brightness-[1.02] active:scale-[0.94]"
                 onClick={() => handleAppClick(app.id, index)}
                 style={itemStyle}
                 aria-label={app.name || app.id}

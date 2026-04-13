@@ -29,7 +29,6 @@ const en: Messages = {
     navFaq: "FAQ",
   },
   faq: {
-    section: "FAQ",
     title: "Frequently Asked Questions",
     subtitle: "Quick answers about visits, screening, payments, and how to reach us.",
     listAria: "Frequently asked questions",
@@ -41,7 +40,6 @@ const en: Messages = {
     carouselSelectedSuffix: " — currently shown",
   },
   services: {
-    section: "Section 2",
     titleLine1: "Comprehensive",
     titleLine2: "Services Available",
     desc: "From everyday consultation to chronic care and women's or children's health, every service is grouped clearly so patients can find what they need fast.",
@@ -54,27 +52,16 @@ const en: Messages = {
     body: "Pelita Clinic works with private insurers, government schemes, and community health programmes. Ask at reception if your plan is accepted.",
   },
   profile: {
-    section: "Section 4",
     title: "Clinic & Doctor Profile",
-    resumeSuffix: "- Resume and Video",
+    resumeSuffix: "— Resume",
     experienceSuffix: "experience",
     qualHeading: "Qualifications & Experience",
     langHeading: "Languages Spoken",
     clinicIdentity: "Clinic Identity",
     established: "Established",
-    carouselAria: "Doctor photo and introduction video",
-    prevSlide: "Previous slide",
-    nextSlide: "Next slide",
-    dotPhoto: "Show doctor photo",
-    dotVideo: "Show doctor video",
-    walkins: "Accepting Walk-ins",
-    photoTitle: "Doctor Photo Placeholder",
-    photoHint: "Client to provide high-resolution image",
-    videoAria: "Doctor introduction video",
-    drVideoBadge: "Dr video",
+    photoPanelAria: "Doctor profile photo",
   },
   testimonials: {
-    section: "Section 5",
     title: "Real Patient Testimonials",
     subtitle: "Collected from Google, Facebook, and Erufu Care based on the client research sheet.",
     googleReviews: "Google Reviews",
@@ -88,7 +75,6 @@ const en: Messages = {
     testimonialAria: "Patient testimonial",
   },
   contact: {
-    section: "Section 6",
     title: "Contact & Appointment CTA",
     leadSuffix: "For faster response, WhatsApp is recommended.",
     visitTitle: "Visit Pelita Clinic",
@@ -149,6 +135,15 @@ const en: Messages = {
       "poster-health-screening": {
         alt: "Pelita Clinic poster: health screening packages and add-on offers.",
       },
+      "poster-senior": {
+        alt: "Pelita Clinic poster: Senior Citizen Health Benefits (SCHB) — registered clinic, up to RM500 per year.",
+      },
+      "poster-vaccine": {
+        alt: "Pelita Clinic poster: vaccinations available — influenza, travel vaccines, HPV, and more.",
+      },
+      "poster-berikel": {
+        alt: "Pelita Clinic poster: Barikel glucose drink for oral glucose tolerance testing — bottle pricing and glucose test package with consultation.",
+      },
     },
   },
 };
@@ -180,7 +175,6 @@ const ms: Messages = {
     navFaq: "Soalan Lazim",
   },
   faq: {
-    section: "Soalan Lazim",
     title: "Soalan Lazim (FAQ)",
     subtitle: "Jawapan ringkas tentang lawatan, saringan, bayaran, dan cara menghubungi kami.",
     listAria: "Senarai soalan dan jawapan",
@@ -192,7 +186,6 @@ const ms: Messages = {
     carouselSelectedSuffix: " — dipaparkan sekarang",
   },
   services: {
-    section: "Bahagian 2",
     titleLine1: "Perkhidmatan Menyeluruh",
     titleLine2: "Yang Tersedia",
     desc: "Daripada konsultasi harian hingga penjagaan kronik serta kesihatan wanita atau kanak-kanak, setiap perkhidmatan dikumpulkan dengan jelas supaya pesakit cepat menemui apa yang mereka perlukan.",
@@ -205,27 +198,16 @@ const ms: Messages = {
     body: "Pelita Clinic bekerjasama dengan syarikat insurans swasta, skim kerajaan, dan program kesihatan komuniti. Tanya di kaunter jika pelan anda diterima.",
   },
   profile: {
-    section: "Bahagian 4",
     title: "Profil Klinik & Doktor",
-    resumeSuffix: "- Resume dan Video",
+    resumeSuffix: "— Resume",
     experienceSuffix: "pengalaman",
     qualHeading: "Kelayakan & Pengalaman",
     langHeading: "Bahasa Pertuturan",
     clinicIdentity: "Identiti Klinik",
     established: "Ditubuhkan",
-    carouselAria: "Foto doktor dan video pengenalan",
-    prevSlide: "Slaid sebelumnya",
-    nextSlide: "Slaid seterusnya",
-    dotPhoto: "Tunjuk foto doktor",
-    dotVideo: "Tunjuk video doktor",
-    walkins: "Terima Walk-in",
-    photoTitle: "Placeholder Foto Doktor",
-    photoHint: "Pelanggan perlu sediakan imej resolusi tinggi",
-    videoAria: "Video pengenalan doktor",
-    drVideoBadge: "Video Dr",
+    photoPanelAria: "Foto profil doktor",
   },
   testimonials: {
-    section: "Bahagian 5",
     title: "Testimoni Pesakit Sebenar",
     subtitle: "Dikumpul dari Google, Facebook, dan Erufu Care berdasarkan helaian penyelidikan pelanggan.",
     googleReviews: "Ulasan Google",
@@ -239,7 +221,6 @@ const ms: Messages = {
     testimonialAria: "Testimoni pesakit",
   },
   contact: {
-    section: "Bahagian 6",
     title: "Hubungi & Tempahan",
     leadSuffix: "Untuk respons lebih cepat, WhatsApp disyorkan.",
     visitTitle: "Lawati Pelita Clinic",
@@ -300,6 +281,15 @@ const ms: Messages = {
       "poster-health-screening": {
         alt: "Poster Pelita Clinic: pakej saringan kesihatan dan tawaran tambahan.",
       },
+      "poster-senior": {
+        alt: "Poster Pelita Clinic: Manfaat Kesihatan Warga Emas (SCHB) — klinik berdaftar, sehingga RM500 setahun.",
+      },
+      "poster-vaccine": {
+        alt: "Poster Pelita Clinic: vaksinasi tersedia — influenza, vaksin pelancong, HPV, dan lain-lain.",
+      },
+      "poster-berikel": {
+        alt: "Poster Pelita Clinic: minuman glukosa Barikel untuk ujian toleransi glukosa — harga botol dan pakej ujian air gula dengan konsultasi.",
+      },
     },
   },
 };
@@ -331,7 +321,6 @@ const zh: Messages = {
     navFaq: "常见问题",
   },
   faq: {
-    section: "常见问题",
     title: "常见问题（FAQ）",
     subtitle: "关于就诊、体检、付款与联系方式的简要说明。",
     listAria: "常见问题列表",
@@ -343,7 +332,6 @@ const zh: Messages = {
     carouselSelectedSuffix: " — 当前显示",
   },
   services: {
-    section: "第2部分",
     titleLine1: "全面",
     titleLine2: "医疗服务",
     desc: "从日常门诊到慢病管理以及妇女或儿童健康，每项服务都分组呈现，方便患者快速查找。",
@@ -356,27 +344,16 @@ const zh: Messages = {
     body: "Pelita Clinic 与私人保险公司、政府计划及社区健康项目合作。请在前台确认您的计划是否适用。",
   },
   profile: {
-    section: "第4部分",
     title: "诊所与医生简介",
-    resumeSuffix: "- 简历与视频",
+    resumeSuffix: "— 简历",
     experienceSuffix: "经验",
     qualHeading: "资历与经验",
     langHeading: "使用语言",
     clinicIdentity: "诊所概况",
     established: "成立",
-    carouselAria: "医生照片与介绍视频",
-    prevSlide: "上一张",
-    nextSlide: "下一张",
-    dotPhoto: "显示医生照片",
-    dotVideo: "显示医生视频",
-    walkins: "接受现场挂号",
-    photoTitle: "医生照片占位",
-    photoHint: "请客户提供高清照片",
-    videoAria: "医生介绍视频",
-    drVideoBadge: "医生视频",
+    photoPanelAria: "医生简介照片",
   },
   testimonials: {
-    section: "第5部分",
     title: "真实患者评价",
     subtitle: "根据客户研究表，整理自 Google、Facebook 与 Erufu Care。",
     googleReviews: "Google 评价",
@@ -390,7 +367,6 @@ const zh: Messages = {
     testimonialAria: "患者评价",
   },
   contact: {
-    section: "第6部分",
     title: "联系与预约",
     leadSuffix: "如需更快回复，建议使用 WhatsApp。",
     visitTitle: "到访 Pelita Clinic",
@@ -447,6 +423,15 @@ const zh: Messages = {
       },
       "poster-health-screening": {
         alt: "Pelita Clinic 海报：健康体检套餐与加购优惠。",
+      },
+      "poster-senior": {
+        alt: "Pelita Clinic 海报：长者医疗福利（SCHB）——注册诊所，每年最高 RM500。",
+      },
+      "poster-vaccine": {
+        alt: "Pelita Clinic 海报：疫苗接种服务——流感、旅行疫苗、HPV 等。",
+      },
+      "poster-berikel": {
+        alt: "Pelita Clinic 海报：Barikel 葡萄糖饮品（口服糖耐量检查）——瓶装价格与含咨询的糖耐量检测套餐。",
       },
     },
   },

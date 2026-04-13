@@ -17,6 +17,13 @@
     @apply border-slate-200;
   }
 
+  /* No native image/video drag preview (ghost) — keeps layout interactions clean. */
+  img,
+  video {
+    -webkit-user-drag: none;
+    -moz-user-drag: none;
+  }
+
   /* Single vertical scroll on the viewport — avoids nested scrollbars when inner
      wrappers use overflow-x clip/hidden (CSS forces overflow-y: auto on those boxes). */
   html {
@@ -51,10 +58,6 @@
 
   .section-title {
     @apply text-3xl md:text-4xl font-bold tracking-tight text-slate-900;
-  }
-
-  .section-subtitle {
-    @apply text-sm uppercase tracking-[0.16em] font-semibold text-violet-600;
   }
 
   .glass-card {

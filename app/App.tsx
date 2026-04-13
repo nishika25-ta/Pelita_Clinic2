@@ -11,6 +11,7 @@ import ContactSection from "../components/sections/ContactSection";
 import FaqSection from "../components/sections/FaqSection";
 import SiteFooter from "../components/layout/SiteFooter";
 import AppleDock from "../components/layout/AppleDock";
+import WhatsAppFloat from "../components/layout/WhatsAppFloat";
 import SplashScreen from "../components/ui/SplashScreen";
 import LanguageSwitcher from "../components/layout/LanguageSwitcher";
 
@@ -42,6 +43,7 @@ export default function App() {
     <>
       <SplashScreen onExitComplete={onSplashExitComplete} />
       <LanguageSwitcher />
+      <WhatsAppFloat />
       <SmoothScroll>
         <div className="min-h-screen overflow-x-clip overflow-y-visible font-sans text-slate-800 selection:bg-purple-200 selection:text-purple-900">
           <main>
