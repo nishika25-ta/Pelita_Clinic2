@@ -16,6 +16,7 @@ export type SplashScreenProps = {
 /** BlurText timing — must match `BlurText` props on the splash (`delay` ms, `stepDuration`, default 2-step `animationTo`). */
 const SPLASH_BLUR_DELAY_MS = 160;
 const SPLASH_BLUR_STEP_DURATION = 0.28;
+const SPLASH_EXIT_MS = 1100;
 
 /** Hold until last word’s blur animation finishes + dwell + exit buffer (same whenever BlurText runs). */
 function computeSplashHoldMs(text: string): number {
@@ -53,6 +54,9 @@ export default function SplashScreen({ onExitStart, onExitComplete }: SplashScre
   const logoTransition = reduceMotion
     ? { duration: 0.28, ease: "easeOut" as const }
     : { duration: 0.5, ease: [0.22, 1, 0.36, 1] as const };
+  const logoExitTransition = reduceMotion
+    ? { duration: 0.28, ease: "easeOut" as const }
+    : { duration: SPLASH_EXIT_MS / 1000, ease: [0.16, 1, 0.3, 1] as const };
 
   return (
     <AnimatePresence onExitComplete={() => onExitCompleteRef.current?.()}>
@@ -67,10 +71,23 @@ export default function SplashScreen({ onExitStart, onExitComplete }: SplashScre
           initial={{ opacity: 1 }}
           exit={{
             opacity: 0,
-            transition: { duration: 0.85, ease: [0.42, 0, 1, 1] },
+            transition: { duration: SPLASH_EXIT_MS / 1000, ease: [0.22, 1, 0.36, 1] },
           }}
         >
-          <div className="pointer-events-none absolute inset-0 overflow-hidden [contain:strict]" aria-hidden>
+          <motion.div
+            className="pointer-events-none absolute inset-0 overflow-hidden [contain:strict]"
+            aria-hidden
+            exit={
+              reduceMotion
+                ? { opacity: 0 }
+                : {
+                    scale: 1.06,
+                    filter: "blur(4px)",
+                    opacity: 0.9,
+                  }
+            }
+            transition={logoExitTransition}
+          >
             <img
               src={SPLASH_BG_SRC}
               alt=""
@@ -79,16 +96,36 @@ export default function SplashScreen({ onExitStart, onExitComplete }: SplashScre
               className="absolute inset-0 h-full w-full object-cover object-center"
             />
             <div className="absolute inset-0 bg-[#F5F5F7]/55" />
-          </div>
+          </motion.div>
 
-          {/* Centered row: logo + title */}
+          {/* Centered stack: logo above title */}
           <div className="relative z-10 flex w-full max-w-[100vw] items-center justify-center px-4 sm:px-6">
-            <div className="flex min-w-0 max-w-full flex-wrap items-center justify-center gap-5 sm:gap-8 md:gap-10">
+            <div className="flex min-w-0 max-w-full flex-col items-center justify-center gap-4 sm:gap-5 md:gap-6">
+              <motion.div
+                aria-hidden
+                className="pointer-events-none absolute h-28 w-28 rounded-full bg-violet-400/25 blur-2xl sm:h-36 sm:w-36"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: reduceMotion ? 0.18 : 0.26 }}
+                exit={reduceMotion ? { opacity: 0 } : { opacity: 0, scale: 2.2 }}
+                transition={logoExitTransition}
+              />
               <motion.div
                 initial={reduceMotion ? { opacity: 0, scale: 0.96 } : { opacity: 0, scale: 0.88, rotate: -12 }}
                 animate={{ opacity: 1, scale: 1, rotate: 0 }}
+                exit={
+                  reduceMotion
+                    ? { opacity: 0, scale: 1.08, transition: logoExitTransition }
+                    : {
+                        opacity: [1, 1, 0.82, 0],
+                        scale: [1, 1.08, 3.6, 8.4],
+                        rotate: 0,
+                        filter: ["blur(0px)", "blur(0px)", "blur(1.2px)", "blur(3px)"],
+                        transition: logoExitTransition,
+                      }
+                }
                 transition={logoTransition}
-                className="flex h-[4.5rem] w-[4.5rem] shrink-0 items-center justify-center rounded-3xl border border-gray-200/90 bg-white shadow-[0_20px_40px_-10px_rgba(0,102,204,0.18)] sm:h-20 sm:w-20"
+                className="flex h-[4.5rem] w-[4.5rem] shrink-0 items-center justify-center rounded-3xl border border-gray-200/90 bg-white shadow-[0_20px_40px_-10px_rgba(0,102,204,0.18)] will-change-transform sm:h-20 sm:w-20"
+                style={{ transformOrigin: "center center", backfaceVisibility: "hidden" }}
               >
                 <img
                   src={LOGO_SRC}
@@ -99,17 +136,22 @@ export default function SplashScreen({ onExitStart, onExitComplete }: SplashScre
               </motion.div>
 
               {/* Title: always BlurText; MotionConfig overrides OS reduced-motion so desktop matches mobile (logo/exit still respect `reduceMotion`). */}
-              <MotionConfig reducedMotion="never">
-                <BlurText
-                  text={splashText}
-                  effect="lift"
-                  delay={SPLASH_BLUR_DELAY_MS}
-                  animateBy="words"
-                  direction="top"
-                  stepDuration={SPLASH_BLUR_STEP_DURATION}
-                  className="min-w-0 text-center text-4xl font-bold tracking-[-0.04em] text-[#1D1D1F] sm:text-5xl md:text-6xl lg:text-7xl"
-                />
-              </MotionConfig>
+              <motion.div
+                exit={reduceMotion ? { opacity: 0 } : { opacity: 0, y: 10, scale: 0.985, filter: "blur(1px)" }}
+                transition={{ duration: 0.34, ease: [0.16, 1, 0.3, 1] }}
+              >
+                <MotionConfig reducedMotion="never">
+                  <BlurText
+                    text={splashText}
+                    effect="lift"
+                    delay={SPLASH_BLUR_DELAY_MS}
+                    animateBy="words"
+                    direction="top"
+                    stepDuration={SPLASH_BLUR_STEP_DURATION}
+                    className="min-w-0 text-center text-4xl font-bold tracking-[-0.04em] text-[#1D1D1F] sm:text-5xl md:text-6xl lg:text-7xl"
+                  />
+                </MotionConfig>
+              </motion.div>
             </div>
           </div>
         </motion.div>

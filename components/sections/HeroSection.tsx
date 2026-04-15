@@ -96,10 +96,7 @@ export default function HeroSection({ splashReveal }: HeroSectionProps) {
   const [activeIndex, setActiveIndex] = useState(0);
   const [dragPx, setDragPx] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
-  const [isDesktop, setIsDesktop] = useState(
-    () => typeof window !== "undefined" && window.matchMedia("(min-width: 768px)").matches,
-  );
-  const autoAdvanceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const autoAdvanceTimerRef = useRef<number | null>(null);
   const viewportRef = useRef<HTMLDivElement>(null);
   const activeIndexRef = useRef(0);
   const dragPointerIdRef = useRef<number | null>(null);
@@ -108,14 +105,6 @@ export default function HeroSection({ splashReveal }: HeroSectionProps) {
   const dragAbortRef = useRef<AbortController | null>(null);
 
   activeIndexRef.current = activeIndex;
-
-  useEffect(() => {
-    const mq = window.matchMedia("(min-width: 768px)");
-    const sync = () => setIsDesktop(mq.matches);
-    sync();
-    mq.addEventListener("change", sync);
-    return () => mq.removeEventListener("change", sync);
-  }, []);
 
   useEffect(
     () => () => {
@@ -134,7 +123,7 @@ export default function HeroSection({ splashReveal }: HeroSectionProps) {
   );
 
   /** Autoplay: 10s on the main slide, 5s on posters and highlights. Reschedules when the slide changes.
-   *  Pauses while the user is dragging on desktop. Same behavior on mobile and desktop. */
+   *  Pauses while the user is dragging. Same behavior on mobile and desktop. */
   useEffect(() => {
     if (!heroReady || isDragging) {
       if (autoAdvanceTimerRef.current !== null) {
@@ -176,7 +165,8 @@ export default function HeroSection({ splashReveal }: HeroSectionProps) {
 
   const handleCarouselPointerDown = useCallback(
     (e: ReactPointerEvent<HTMLDivElement>) => {
-      if (!isDesktop || reduceMotion) return;
+      if (reduceMotion) return;
+      if (e.pointerType === "mouse" && e.button !== 0) return;
       const el = e.target as HTMLElement;
       if (el.closest("button, a, input, textarea, select, [data-hero-no-drag]")) return;
 
@@ -248,7 +238,7 @@ export default function HeroSection({ splashReveal }: HeroSectionProps) {
       window.addEventListener("pointerup", up, listenOpts);
       window.addEventListener("pointercancel", up, listenOpts);
     },
-    [clampedDragForClientX, isDesktop, reduceMotion],
+    [clampedDragForClientX, reduceMotion],
   );
 
   const showMainBackdrop = activeIndex === 0;
@@ -323,7 +313,7 @@ export default function HeroSection({ splashReveal }: HeroSectionProps) {
           ref={viewportRef}
           className={cn(
             "relative min-h-0 flex-1 overflow-hidden touch-pan-y",
-            isDesktop && !reduceMotion && "md:cursor-grab md:active:cursor-grabbing",
+            !reduceMotion && "md:cursor-grab md:active:cursor-grabbing",
             isDragging && "cursor-grabbing select-none",
           )}
           onPointerDown={handleCarouselPointerDown}
