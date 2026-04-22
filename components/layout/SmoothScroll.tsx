@@ -1,8 +1,6 @@
-import { useMemo, type ReactNode } from "react";
+import { useEffect, useMemo, useState, type ReactNode } from "react";
 import { ReactLenis } from "lenis/react";
 import type { LenisOptions } from "lenis";
-
-const isMobile = typeof window !== "undefined" && window.matchMedia("(max-width: 767px)").matches;
 
 const baseLenisOptions: LenisOptions = {
   lerp: 0.088,
@@ -31,7 +29,17 @@ interface SmoothScrollProps {
 }
 
 export default function SmoothScroll({ children }: SmoothScrollProps) {
-  const options = useMemo(() => (isMobile ? mobileOptions : desktopOptions), []);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 767px)");
+    const sync = () => setIsMobile(mq.matches);
+    sync();
+    mq.addEventListener("change", sync);
+    return () => mq.removeEventListener("change", sync);
+  }, []);
+
+  const options = useMemo(() => (isMobile ? mobileOptions : desktopOptions), [isMobile]);
   return (
     <ReactLenis root options={options}>
       {children}

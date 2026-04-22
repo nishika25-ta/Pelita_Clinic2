@@ -9,8 +9,13 @@ export default function ProfileSection() {
   const { ref, y } = useParallax({ distance: 35 });
 
   return (
-    <section id="profile" className="section-shell overflow-hidden">
-      <div className="container-shell grid items-start gap-8 lg:grid-cols-[1.05fr_0.95fr]">
+    <section id="profile" className="section-shell relative overflow-hidden">
+      <div className="pointer-events-none absolute inset-0 z-0" aria-hidden="true">
+        <div className="absolute inset-0 scale-105 bg-[url('/bg.jpg')] bg-cover bg-center blur-sm md:blur-[6px]" />
+        <div className="absolute inset-0 bg-white/72" />
+      </div>
+
+      <div className="container-shell relative z-10 grid items-start gap-8 lg:grid-cols-[1.05fr_0.95fr]">
         <motion.div ref={ref} style={{ y }} className="relative w-full">
           <div className="absolute inset-0 -translate-x-10 translate-y-10 transform rounded-full bg-violet-100 opacity-60 blur-3xl max-md:hidden" />
           <div

@@ -112,6 +112,20 @@ export const HERO_POSTERS: readonly HeroPosterSlide[] = [
     srcMobile: "/poster_hero/new/give_P.jpeg",
     alt: "",
   },
+  {
+    id: "poster-new-post-1",
+    order: 25,
+    src: "/new_post/land1.png",
+    srcMobile: "/new_post/pot1.png",
+    alt: "",
+  },
+  {
+    id: "poster-new-post-2",
+    order: 26,
+    src: "/new_post/land2.png",
+    srcMobile: "/new_post/pot2.png",
+    alt: "",
+  },
 ] as const;
 
 export function getOrderedHeroPosters(posters: readonly HeroPosterSlide[]): HeroPosterSlide[] {

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Quote, Star, UserRound } from "lucide-react";
 import { useI18n } from "@/contexts/I18nContext";
@@ -65,10 +65,18 @@ export function TestimonialReviewCard({ item, className }: TestimonialReviewCard
   );
 }
 
-const IS_MOBILE = typeof window !== "undefined" && window.matchMedia("(max-width: 767px)").matches;
-
 export function TestimonialsColumn({ className, testimonials, duration = 15 }: TestimonialsColumnProps) {
-  if (IS_MOBILE) {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 767px)");
+    const sync = () => setIsMobile(mq.matches);
+    sync();
+    mq.addEventListener("change", sync);
+    return () => mq.removeEventListener("change", sync);
+  }, []);
+
+  if (isMobile) {
     return (
       <div className={`flex flex-col gap-5 ${className ?? ""}`}>
         {testimonials.map((item, i) => (

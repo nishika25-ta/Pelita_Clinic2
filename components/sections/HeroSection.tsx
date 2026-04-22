@@ -389,10 +389,12 @@ export default function HeroSection({ splashReveal }: HeroSectionProps) {
                     >
                       <motion.h1
                         variants={fadeUp}
-                        className="text-balance text-4xl font-black leading-[1.05] tracking-[-0.04em] sm:text-6xl md:text-7xl lg:text-8xl"
+                        className="rounded-2xl border border-white/20 bg-white/10 px-5 py-4 text-balance text-4xl font-black leading-[1.05] tracking-[-0.04em] shadow-[0_16px_40px_-24px_rgba(0,0,0,0.7)] backdrop-blur-[6px] sm:px-7 sm:py-5 sm:text-6xl md:rounded-3xl md:px-10 md:py-7 md:text-7xl lg:text-8xl"
                       >
                         <span className="block text-white">{t("hero.mainLine1")}</span>
-                        <span className="mt-1 block text-[#D4C5A0] sm:mt-2">{t("hero.mainLine2")}</span>
+                        <span className="mt-1 block text-[#8B5CF6] drop-shadow-[0_2px_10px_rgba(124,58,237,0.6)] sm:mt-2">
+                          {t("hero.mainLine2")}
+                        </span>
                       </motion.h1>
 
                       <motion.p

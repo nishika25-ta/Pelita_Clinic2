@@ -19,17 +19,15 @@ export default function MacOSDock({ apps, onAppClick, openApps = [], className =
   const animationFrameRef = useRef<number | undefined>(undefined);
   const lastMouseMoveTime = useRef(0);
 
-  const getResponsiveConfig = useCallback(() => {
-    const w = typeof window === "undefined" ? 1200 : window.innerWidth;
-    return getDockResponsiveConfig(w);
-  }, []);
+  const getResponsiveConfig = useCallback((width: number) => getDockResponsiveConfig(width), []);
 
-  const [config, setConfig] = useState(getResponsiveConfig);
+  const [config, setConfig] = useState(() => getResponsiveConfig(1200));
   const { baseIconSize, maxScale, effectWidth, baseSpacing, padX, padY } = config;
   const minScale = 1.0;
 
   useEffect(() => {
-    const handleResize = () => setConfig(getResponsiveConfig());
+    const handleResize = () => setConfig(getResponsiveConfig(window.innerWidth));
+    handleResize();
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, [getResponsiveConfig]);
