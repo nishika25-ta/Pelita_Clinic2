@@ -341,23 +341,23 @@ export default function HeroSection({ splashReveal }: HeroSectionProps) {
                     <div
                       className={cn(
                         "relative z-[1] flex min-h-[100dvh] min-h-[100svh] w-full items-center justify-center px-4 pb-24 pt-[calc(4.5rem+env(safe-area-inset-top,0px))] sm:px-6 sm:pb-28 sm:pt-[calc(5rem+env(safe-area-inset-top,0px))]",
-                        "md:absolute md:inset-0 md:min-h-0 md:items-stretch md:justify-stretch md:p-0 md:pb-0 md:pt-0",
+                        "md:px-8 md:pb-32 md:pt-[calc(6rem+env(safe-area-inset-top,0px))] lg:px-12",
                       )}
                     >
                       <div
                         className={cn(
                           "hero-poster-frame w-full max-w-[min(100%,28rem)] sm:max-w-[min(100%,36rem)] md:max-w-none",
-                          "md:relative md:h-full md:min-h-[100dvh] md:min-h-[100svh] md:w-full",
+                          "md:w-full md:max-w-[min(100%,64rem)] lg:max-w-[min(100%,74rem)]",
                         )}
                       >
                         {slide.srcMobile ? (
-                          <picture className="block w-full max-md:block md:absolute md:inset-0 md:h-full md:w-full">
+                          <picture className="block w-full">
                             <source media="(max-width: 767px)" srcSet={slide.srcMobile} />
                             <img
                               src={slide.src}
                               alt={slide.alt}
                               draggable={false}
-                              className="hero-poster-img block w-full rounded-2xl border border-white/15 bg-transparent shadow-[0_24px_80px_-20px_rgba(0,0,0,0.85)] ring-1 ring-white/10 sm:rounded-3xl md:h-full md:min-h-full md:w-full md:rounded-none md:border-0 md:ring-0 md:shadow-none"
+                              className="hero-poster-img block w-full rounded-2xl border border-white/15 bg-transparent shadow-[0_24px_80px_-20px_rgba(0,0,0,0.85)] ring-1 ring-white/10 sm:rounded-3xl md:rounded-3xl"
                               loading={slideIndex <= 2 ? "eager" : "lazy"}
                               fetchPriority={slideIndex <= 2 ? "high" : "auto"}
                               decoding="async"
@@ -369,7 +369,7 @@ export default function HeroSection({ splashReveal }: HeroSectionProps) {
                             src={slide.src}
                             alt={slide.alt}
                             draggable={false}
-                            className="hero-poster-img block w-full rounded-2xl border border-white/15 bg-transparent shadow-[0_24px_80px_-20px_rgba(0,0,0,0.85)] ring-1 ring-white/10 sm:rounded-3xl md:absolute md:inset-0 md:h-full md:min-h-full md:w-full md:rounded-none md:border-0 md:ring-0 md:shadow-none"
+                            className="hero-poster-img block w-full rounded-2xl border border-white/15 bg-transparent shadow-[0_24px_80px_-20px_rgba(0,0,0,0.85)] ring-1 ring-white/10 sm:rounded-3xl md:rounded-3xl"
                             loading={slideIndex <= 2 ? "eager" : "lazy"}
                             fetchPriority={slideIndex <= 2 ? "high" : "auto"}
                             decoding="async"
